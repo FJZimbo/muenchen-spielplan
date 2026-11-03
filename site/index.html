@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Münchner Spielplan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Sans:wght@400..700&display=swap">
+<style>
+/* Layout: a poster-style programme. Month titles as heavy expanded type with a rule,
+   each day a block with a big date column and event cards; filters stay pinned on top. */
+:root {
+  --paper: #ffffff;
+  --ink: #121317;
+  --muted: #5c5f68;
+  --line: #e2e3e8;
+  --soft: #f2f3f5;
+  --gold: #f4c300;          /* Munich black & gold */
+  --on-gold: #121317;
+  --sold: #c8102e;
+  --few: #a85400;
+  --cancel: #6b6f78;
+  --c-theatre: #c4122f;
+  --c-opera: #8f5f00;
+  --c-concert: #00766a;
+  --c-cinema: #3b3fa6;
+  --shadow: 0 1px 0 rgba(18, 19, 23, .04), 0 8px 24px -16px rgba(18, 19, 23, .25);
+
+  --display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+
+  --radius: 6px;
+  --max: 1240px;
+  --gutter: clamp(16px, 3vw, 32px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121317; --ink: #f1f1f3; --muted: #a2a5ae; --line: #2a2c33; --soft: #1c1e24;
+    --gold: #f4c300; --on-gold: #121317; --sold: #ff6b7f; --few: #f0a24a; --cancel: #9a9ea8;
+    --c-theatre: #ff5a6e; --c-opera: #e2b04a; --c-concert: #3cc4b1; --c-cinema: #8f93ff;
+    --shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 8px 24px -16px rgba(0, 0, 0, .8);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121317; --ink: #f1f1f3; --muted: #a2a5ae; --line: #2a2c33; --soft: #1c1e24;
+  --gold: #f4c300; --on-gold: #121317; --sold: #ff6b7f; --few: #f0a24a; --cancel: #9a9ea8;
+  --c-theatre: #ff5a6e; --c-opera: #e2b04a; --c-concert: #3cc4b1; --c-cinema: #8f93ff;
+  --shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 8px 24px -16px rgba(0, 0, 0, .8);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font: 400 15px/1.45 var(--body);
+}
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------- masthead */
+.masthead { border-bottom: 2px solid var(--ink); }
+.masthead .wrap { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding-block: 18px 14px; flex-wrap: wrap; }
+.brand { text-decoration: none; display: grid; gap: 2px; }
+.brand-name {
+  font: 900 clamp(28px, 5vw, 46px)/.9 var(--display); font-stretch: 125%;
+  letter-spacing: -.02em; text-transform: uppercase;
+}
+.brand-name span { background: var(--gold); color: var(--on-gold); padding: 0 .12em; }
+.brand-sub { font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+.mast-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.updated { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.updated.stale { color: var(--few); }
+.lang { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
+.lang button { background: none; border: 0; padding: 4px 11px; font-weight: 700; font-size: 12.5px; letter-spacing: .06em; cursor: pointer; }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.preview-note { background: var(--gold); color: var(--on-gold); font-size: 13px; }
+.preview-note .wrap { padding-block: 8px; }
+
+/* ---------- sticky filter bar */
+.bar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+}
+.bar .wrap { display: grid; gap: 10px; padding-block: 12px 10px; }
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; min-width: 0; }
+.search {
+  flex: 1 1 220px; min-width: 0; display: flex; align-items: center; gap: 8px;
+  border: 1.5px solid var(--line); border-radius: 999px; padding: 6px 14px; background: var(--paper);
+}
+.search:focus-within { border-color: var(--ink); }
+.search input { border: 0; outline: 0; background: none; width: 100%; min-width: 0; padding: 2px 0; }
+.search svg { flex: none; color: var(--muted); }
+.toggle, .chip {
+  display: inline-flex; align-items: center; gap: 7px; cursor: pointer; user-select: none;
+  border: 1.5px solid var(--line); background: var(--paper); border-radius: 999px;
+  padding: 6px 13px; font-size: 13.5px; font-weight: 600; white-space: nowrap;
+}
+.toggle:hover, .chip:hover { border-color: var(--ink); }
+.toggle[aria-pressed="true"] { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.chip .ico { width: 18px; height: 18px; }
+.chip .bub {
+  width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center;
+  color: #fff; font: 800 8.5px/1 var(--display); font-stretch: 100%; letter-spacing: -.01em; margin-left: -6px;
+}
+.chip .n { font-weight: 500; opacity: .6; font-variant-numeric: tabular-nums; }
+.date-jump { border: 1.5px solid var(--line); border-radius: 999px; padding: 5px 10px; background: var(--paper); font-size: 13.5px; }
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; min-width: 0; }
+.chips::-webkit-scrollbar { display: none; }
+.more-filters { display: grid; gap: 8px; }
+.filter-toggle { display: none; }
+.clear { background: none; border: 0; text-decoration: underline; color: var(--muted); cursor: pointer; font-size: 13px; padding: 4px; }
+
+/* day strip */
+.strip { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; min-width: 0; scroll-behavior: smooth; }
+.strip .m {
+  flex: none; writing-mode: vertical-rl; transform: rotate(180deg); font: 800 10px/1 var(--display);
+  font-stretch: 125%; text-transform: uppercase; letter-spacing: .08em; color: var(--muted);
+  padding: 4px 2px; border-right: 2px solid var(--ink); margin-left: 6px;
+}
+.strip a {
+  flex: none; display: grid; justify-items: center; gap: 1px; text-decoration: none;
+  min-width: 46px; padding: 5px 6px 4px; border-radius: var(--radius); border: 1.5px solid transparent;
+}
+.strip a:hover { border-color: var(--line); }
+.strip .wd { font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.strip .dn { font: 800 19px/1 var(--display); font-variant-numeric: tabular-nums; }
+.strip .ct { font-size: 10.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.strip a.today .dn { background: var(--gold); color: var(--on-gold); padding: 1px 4px; border-radius: 3px; }
+.strip a.current { border-color: var(--ink); }
+
+/* ---------- programme */
+main { padding-block: 8px 48px; }
+.status-msg { padding-block: 40px; color: var(--muted); font-size: 16px; max-width: 60ch; }
+.month {
+  margin: 44px 0 0; padding-bottom: 8px; border-bottom: 4px solid var(--ink);
+  font: 900 clamp(34px, 6.5vw, 72px)/.92 var(--display); font-stretch: 125%;
+  letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance;
+}
+.month small { font: 500 .3em/1 var(--body); letter-spacing: .04em; color: var(--muted); margin-left: .4em; vertical-align: .9em; }
+.day { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 20px; padding-block: 22px; border-bottom: 1px solid var(--line); }
+.day-head { position: sticky; top: var(--bar-h, 150px); align-self: start; display: grid; gap: 2px; }
+.day-num { font: 900 56px/.85 var(--display); font-stretch: 112%; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+.day-wd { font-weight: 700; font-size: 14px; }
+.day-ct { font-size: 12.5px; color: var(--muted); }
+.today-badge { justify-self: start; margin-top: 6px; background: var(--gold); color: var(--on-gold); font-weight: 700; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; }
+.day-body { display: grid; gap: 18px; min-width: 0; }
+.sub-h { margin: 4px 0 -6px; font: 800 12px/1 var(--display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.sub-h::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+
+.cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+.ev {
+  display: flex; flex-direction: column; min-width: 0; background: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+}
+.media { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: var(--soft); overflow: hidden; display: block; }
+.media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+.ev:hover .media img { transform: scale(1.03); }
+.ph {
+  position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
+  padding: 12px 14px; color: #fff; overflow: hidden;
+}
+.ph .ph-short { font: 900 44px/.85 var(--display); font-stretch: 125%; text-transform: uppercase; opacity: .95; letter-spacing: -.02em; }
+.ph .ph-ico { width: 28px; height: 28px; flex: none; opacity: .8; }
+.ph::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,.07) 0 2px, transparent 2px 14px); pointer-events: none; }
+.cat-badge {
+  position: absolute; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px;
+  background: var(--paper); color: var(--ink); border-radius: 999px; padding: 3px 9px 3px 6px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .03em;
+}
+.cat-badge .ico { width: 15px; height: 15px; }
+.ev-body { display: grid; gap: 7px; padding: 12px 14px 14px; flex: 1; align-content: start; }
+.ev-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+.time { font: 800 22px/1 var(--display); font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.venue {
+  display: inline-flex; align-items: center; gap: 6px; min-width: 0;
+  font-size: 12.5px; font-weight: 600; color: var(--muted);
+}
+.venue i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.venue b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ev-title { margin: 0; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; }
+.ev-title a { text-decoration: none; }
+.ev-title a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.ev-sub { margin: 0; font-size: 13.5px; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.meta { margin: 0; font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 10px; }
+.meta span:not(:last-child)::after { content: "·"; margin-left: 10px; opacity: .6; }
+.tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 3px; padding: 2px 6px; }
+.state { font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; border-radius: 3px; padding: 2px 7px; color: var(--paper); }
+.state.sold_out { background: var(--sold); }
+.state.few { background: var(--few); }
+.state.cancelled { background: var(--cancel); }
+.note { font-size: 11.5px; color: var(--muted); font-style: italic; }
+.actions { display: flex; gap: 8px; margin-top: 4px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-size: 13px; font-weight: 700;
+  border: 1.5px solid var(--ink); border-radius: 999px; padding: 5px 13px;
+}
+.btn:hover { background: var(--soft); }
+.btn.primary { background: var(--ink); color: var(--paper); }
+.btn.primary:hover { opacity: .88; background: var(--ink); }
+.ev.is-sold_out .media img, .ev.is-cancelled .media img { filter: grayscale(.85); opacity: .7; }
+.ev.is-cancelled .ev-title { text-decoration: line-through; text-decoration-thickness: 2px; }
+
+/* cinema */
+.films { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+.film {
+  display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; min-width: 0;
+  border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; background: var(--paper);
+}
+.poster { position: relative; aspect-ratio: 2 / 3; max-width: 100%; border-radius: 3px; overflow: hidden; background: var(--soft); }
+.poster img { width: 100%; height: 100%; object-fit: cover; }
+.poster .ph { padding: 6px; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
+.poster .ph .ph-short { font-size: 15px; }
+.poster .ph .ph-ico { width: 18px; height: 18px; }
+.film-body { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.film .ev-title { font-size: 16px; }
+.times { display: flex; flex-wrap: wrap; gap: 5px; }
+.t {
+  display: inline-flex; align-items: baseline; gap: 4px; text-decoration: none;
+  border: 1.5px solid var(--ink); border-radius: 4px; padding: 3px 7px;
+  font: 700 13.5px/1.1 var(--display); font-variant-numeric: tabular-nums;
+}
+.t small { font: 700 9.5px/1 var(--body); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+a.t:hover { background: var(--ink); color: var(--paper); }
+a.t:hover small { color: var(--paper); }
+.t.sold_out { border-color: var(--line); color: var(--muted); text-decoration: line-through; }
+.t.past { opacity: .4; }
+
+.more-sentinel { height: 1px; }
+.empty { padding: 32px 0; color: var(--muted); }
+
+/* ---------- footer / sources */
+footer { border-top: 2px solid var(--ink); }
+footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
+.sources-h { font: 800 13px/1 var(--display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .1em; margin: 0; }
+.sources { display: grid; gap: 6px 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); font-size: 13px; }
+.src { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.src i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.src a { text-decoration: none; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.src a:hover { text-decoration: underline; }
+.src .n { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.src .n.bad { color: var(--sold); font-weight: 700; }
+.fine { font-size: 12.5px; color: var(--muted); max-width: 80ch; margin: 0; }
+
+.ico { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 760px) {
+  .day { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-block: 18px; }
+  .day-head { position: static; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .day-num { font-size: 40px; }
+  .today-badge { margin-top: 0; }
+  .filter-toggle { display: inline-flex; }
+  .more-filters:not(.open) { display: none; }
+  .strip a { min-width: 42px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <a class="brand" href="#top" id="top">
+      <span class="brand-name">München <span>Spielplan</span></span>
+      <span class="brand-sub" id="brand-sub">Theater · Oper · Konzert · Kino in München</span>
+    </a>
+    <div class="mast-right">
+      <span class="updated" id="updated"></span>
+      <div class="lang" role="group" aria-label="Sprache / Language">
+        <button type="button" data-lang="de" aria-pressed="true">DE</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="row">
+      <label class="search" for="q">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" autocomplete="off">
+      </label>
+      <button class="toggle" id="today" type="button" aria-pressed="false">Heute</button>
+      <button class="toggle" id="available" type="button" aria-pressed="false">Nur mit Karten</button>
+      <input class="date-jump" id="date" type="date">
+      <button class="chip filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="more-filters">Filter</button>
+    </div>
+    <div class="more-filters" id="more-filters">
+      <div class="row"><div class="chips" id="cats" aria-label="Kategorie"></div><button class="clear" id="clear" type="button">Zurücksetzen</button></div>
+      <div class="chips" id="venues" aria-label="Häuser"></div>
+    </div>
+    <nav class="strip" id="strip" aria-label="Tage"></nav>
+  </div>
+</div>
+
+<main class="wrap">
+  <p class="status-msg" id="status-msg" role="status"></p>
+  <div id="programme"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <h2 class="sources-h" id="sources-h">Quellen</h2>
+    <div class="sources" id="sources"></div>
+    <p class="fine" id="fine"></p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+
+  const TZ = "Europe/Berlin";
+  const DAYS_PER_CHUNK = 7;
+
+  // ------------------------------------------------------------------ text
+  const T = {
+    de: {
+      locale: "de-DE",
+      sub: "Theater · Oper · Konzert · Kino in München",
+      search: "Titel, Haus, Bühne suchen",
+      today: "Heute", available: "Nur mit Karten", filters: "Filter", clear: "Zurücksetzen",
+      jump: "Zu Datum springen",
+      cat: { theatre: "Theater", opera: "Oper", concert: "Konzert", cinema: "Kino" },
+      stageEvents: "Bühne & Konzert", films: "Kino",
+      events: (n) => `${n} ${n === 1 ? "Termin" : "Termine"}`,
+      soldOut: "Ausverkauft", few: "Wenige Karten", cancelled: "Entfällt",
+      info: "Info", tickets: "Tickets", free: "Eintritt frei", min: "Min.",
+      derived: "Termin laut Spielzeitangabe. Verfügbarkeit im Ticketshop prüfen.",
+      updated: "Stand", stale: "Daten älter als 2 Tage",
+      loading: "Spielplan wird geladen …",
+      noData: "Noch keine Termine. Der Spielplan wird täglich automatisch eingelesen. Nach dem ersten Lauf erscheinen hier alle Termine.",
+      noMatch: "Keine Termine für diese Auswahl.",
+      sources: "Quellen", fine: "Alle Angaben werden automatisch von den Websites der Häuser übernommen und täglich aktualisiert. Ohne Gewähr. Bitte vor dem Besuch beim Haus prüfen. Titel stehen immer im Original.",
+      ok: (n) => `${n} Termine`, none: "keine Daten", kept: (n) => `${n} (alter Stand)`,
+      preview: "Vorschau mit Beispieldaten vom 13.10.2026. Die gehostete Seite zeigt den vollständigen, täglich aktualisierten Spielplan.",
+      wd: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    },
+    en: {
+      locale: "en-GB",
+      sub: "Theatre · Opera · Concerts · Cinema in Munich",
+      search: "Search title, venue, stage",
+      today: "Today", available: "Tickets available", filters: "Filters", clear: "Reset",
+      jump: "Jump to date",
+      cat: { theatre: "Theatre", opera: "Opera", concert: "Concert", cinema: "Cinema" },
+      stageEvents: "Stage & concerts", films: "Cinema",
+      events: (n) => `${n} ${n === 1 ? "event" : "events"}`,
+      soldOut: "Sold out", few: "Few tickets", cancelled: "Cancelled",
+      info: "Info", tickets: "Tickets", free: "Free admission", min: "min",
+      derived: "Date from the venue's run schedule. Check availability in the ticket shop.",
+      updated: "Updated", stale: "Data older than 2 days",
+      loading: "Loading programme …",
+      noData: "No events yet. The programme is read automatically every day; all events appear here after the first run.",
+      noMatch: "No events for this selection.",
+      sources: "Sources", fine: "All information is taken automatically from the venues' websites and refreshed daily. No guarantee; please check with the venue before you go. Titles are always shown in the original.",
+      ok: (n) => `${n} events`, none: "no data", kept: (n) => `${n} (older data)`,
+      preview: "Preview with sample data from 13 Oct 2026. The hosted site shows the full programme, refreshed daily.",
+      wd: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    },
+  };
+  // Labels that come from the venues' sites but are not titles
+  const EN_WORDS = {
+    "Oper": "Opera", "Ballett": "Ballet", "Konzert": "Concert", "Schauspiel": "Drama", "Lesung": "Reading",
+    "Gespräch": "Talk", "Offene Probe": "Open rehearsal", "Liederabend": "Song recital", "Kind&Co": "Kids",
+    "Klassik": "Classical", "Tanz": "Dance", "Tanztheater": "Dance theatre", "Buchpräsentation": "Book launch",
+    "Kinder": "Children", "Familie": "Family", "Chor": "Choir", "Filmmusik": "Film music", "Weltmusik": "World music",
+    "Kabarett": "Cabaret", "Festspiele": "Festival", "Premiere": "Premiere", "Uraufführung": "World premiere",
+    "Wiederaufnahme": "Revival", "Zum letzten Mal": "Final performance", "Gastspiel": "Guest performance",
+    "Publikumsgespräch": "Post-show talk", "Party": "Party",
+  };
+
+  const ICONS = {
+    theatre: '<path d="M5 4.5c4 1.6 10 1.6 14 0V11a7 7 0 0 1-14 0z"/><path d="M9 10h.01M15 10h.01"/><path d="M9.5 14.5c1.4 1 3.6 1 5 0"/>',
+    opera: '<path d="M3 4h18M3 20h18"/><path d="M4 4v16M20 4v16"/><path d="M4 4c0 6 3 9 6.5 10M20 4c0 6-3 9-6.5 10"/>',
+    concert: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
+    cinema: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  };
+  const icon = (k, cls = "ico") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k] || ""}</svg>`;
+
+  // ------------------------------------------------------------------ state
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("msp:" + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem("msp:" + k, JSON.stringify(v)); } catch { /* storage unavailable */ } },
+  };
+  const state = {
+    lang: store.get("lang", (navigator.language || "de").toLowerCase().startsWith("de") ? "de" : "en"),
+    q: "",
+    venues: new Set(store.get("venues", [])),
+    cats: new Set(store.get("cats", [])),
+    todayOnly: false,
+    availableOnly: store.get("available", false),
+    data: null,
+    status: null,
+    days: [],        // [{key, items}]
+    rendered: 0,
+  };
+  const t = () => T[state.lang];
+  const word = (w) => (state.lang === "en" && EN_WORDS[w]) || w;
+
+  const $ = (s, root = document) => root.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
+  // ------------------------------------------------------------------ dates (always Munich time)
+  const fmt = (opts) => new Intl.DateTimeFormat(t().locale, { timeZone: TZ, ...opts });
+  const dayKey = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
+  const todayKey = () => dayKey(new Date());
+  const keyToDate = (k) => new Date(`${k}T12:00:00Z`);
+  const hhmm = (iso) => iso.slice(11, 16);
+
+  // ------------------------------------------------------------------ data
+  const venueMap = () => Object.fromEntries(state.data.venues.map((v) => [v.id, v]));
+
+  function matches(e, V) {
+    const v = V[e.venue_id];
+    if (!v) return false;
+    if (state.venues.size && !state.venues.has(e.venue_id)) return false;
+    if (state.cats.size && !state.cats.has(v.category)) return false;
+    if (state.availableOnly && (e.status === "sold_out" || e.status === "cancelled")) return false;
+    if (state.q) {
+      const hay = `${e.title} ${e.subtitle || ""} ${v.name} ${e.stage || ""} ${e.genre || ""} ${(e.tags || []).join(" ")}`.toLowerCase();
+      if (!state.q.split(/\s+/).every((w) => hay.includes(w))) return false;
+    }
+    return true;
+  }
+
+  function buildDays() {
+    const V = venueMap();
+    const today = todayKey();
+    const byDay = new Map();
+    for (const e of state.data.events) {
+      const k = e.start.slice(0, 10);
+      if (k < today) continue;
+      if (state.todayOnly && k !== today) continue;
+      if (!matches(e, V)) continue;
+      if (!byDay.has(k)) byDay.set(k, []);
+      byDay.get(k).push(e);
+    }
+    state.days = [...byDay.keys()].sort().map((key) => ({ key, items: byDay.get(key).sort((a, b) => a.start.localeCompare(b.start)) }));
+  }
+
+  // ------------------------------------------------------------------ rendering pieces
+  function placeholder(v, cls = "") {
+    const short = v.short || v.name.slice(0, 3);
+    return `<div class="ph ${cls}" style="background:${esc(v.color)}"><span class="ph-short">${esc(short)}</span>${icon(v.category, "ico ph-ico")}</div>`;
+  }
+  function imageOr(e, v) {
+    const ph = placeholder(v);
+    if (!e.image) return ph;
+    return `${ph}<img src="${esc(e.image)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.remove()">`;
+  }
+  function stateBadge(s) {
+    if (s === "sold_out") return `<span class="state sold_out">${t().soldOut}</span>`;
+    if (s === "few") return `<span class="state few">${t().few}</span>`;
+    if (s === "cancelled") return `<span class="state cancelled">${t().cancelled}</span>`;
+    return "";
+  }
+  function durationText(min) {
+    if (!min) return "";
+    const h = Math.floor(min / 60), m = min % 60;
+    return state.lang === "de" ? (h ? `${h} Std.${m ? ` ${m} Min.` : ""}` : `${m} Min.`) : (h ? `${h} h${m ? ` ${m} min` : ""}` : `${m} min`);
+  }
+
+  function eventCard(e, v) {
+    const meta = [e.stage, word(e.genre), durationText(e.duration_min), e.price === "free" ? t().free : e.price]
+      .filter(Boolean).map((x) => `<span>${esc(x)}</span>`).join("");
+    const tags = (e.tags || []).map((x) => `<span class="tag">${esc(word(x))}</span>`).join("") + stateBadge(e.status);
+    const info = e.url ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${t().info}</a>` : "";
+    const tix = e.ticket_url && e.status !== "cancelled" && e.status !== "sold_out"
+      ? `<a class="btn primary" href="${esc(e.ticket_url)}" target="_blank" rel="noopener">${t().tickets} →</a>` : "";
+    return `<article class="ev is-${esc(e.status)}">
+      <a class="media" href="${esc(e.url || v.home)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+        ${imageOr(e, v)}<span class="cat-badge">${icon(v.category)}${esc(t().cat[v.category])}</span></a>
+      <div class="ev-body">
+        <div class="ev-top"><span class="time">${e.time_tbd ? "–" : hhmm(e.start)}</span>
+          <span class="venue"><i style="background:${esc(v.color)}"></i><b>${esc(v.name)}</b></span></div>
+        <h3 class="ev-title"><a href="${esc(e.url || v.home)}" target="_blank" rel="noopener">${esc(e.title)}</a></h3>
+        ${e.subtitle ? `<p class="ev-sub">${esc(e.subtitle)}</p>` : e.description ? `<p class="ev-sub">${esc(e.description)}</p>` : ""}
+        ${meta ? `<p class="meta">${meta}</p>` : ""}
+        ${tags ? `<div class="tags">${tags}</div>` : ""}
+        ${e.note === "derived" ? `<span class="note">${t().derived}</span>` : ""}
+        ${info || tix ? `<div class="actions">${info}${tix}</div>` : ""}
+      </div></article>`;
+  }
+
+  function filmCard(group, v) {
+    const first = group[0];
+    const now = new Date();
+    const times = group.map((e) => {
+      const ver = (e.tags || [])[0];
+      const past = new Date(e.start) < now;
+      const cls = `t ${e.status === "sold_out" ? "sold_out" : ""} ${past ? "past" : ""}`;
+      const inner = `${hhmm(e.start)}${ver ? `<small>${esc(ver)}</small>` : ""}`;
+      const href = e.ticket_url || e.url;
+      const label = e.status === "sold_out" ? ` title="${t().soldOut}"` : "";
+      return href && e.status !== "sold_out" && !past
+        ? `<a class="${cls}" href="${esc(href)}" target="_blank" rel="noopener">${inner}</a>`
+        : `<span class="${cls}"${label}>${inner}</span>`;
+    }).join("");
+    const img = group.find((e) => e.image)?.image;
+    const dur = group.find((e) => e.duration_min)?.duration_min;
+    return `<article class="film">
+      <a class="poster" href="${esc(first.url || v.home)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+        ${placeholder(v)}${img ? `<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}</a>
+      <div class="film-body">
+        <span class="venue"><i style="background:${esc(v.color)}"></i><b>${esc(v.name)}</b></span>
+        <h3 class="ev-title"><a href="${esc(first.url || v.home)}" target="_blank" rel="noopener">${esc(first.title)}</a></h3>
+        ${dur ? `<p class="meta"><span>${esc(durationText(dur))}</span></p>` : ""}
+        <div class="times">${times}</div>
+      </div></article>`;
+  }
+
+  function dayHTML(day, V) {
+    const d = keyToDate(day.key);
+    const stage = [], films = new Map();
+    for (const e of day.items) {
+      const v = V[e.venue_id];
+      if (v.category === "cinema") {
+        const k = `${e.venue_id}|${e.title.toLowerCase()}`;
+        if (!films.has(k)) films.set(k, []);
+        films.get(k).push(e);
+      } else stage.push(e);
+    }
+    const isToday = day.key === todayKey();
+    const wd = fmt({ weekday: "long" }).format(d);
+    let body = "";
+    if (stage.length) {
+      body += films.size ? `<h4 class="sub-h">${t().stageEvents}</h4>` : "";
+      body += `<div class="cards">${stage.map((e) => eventCard(e, V[e.venue_id])).join("")}</div>`;
+    }
+    if (films.size) {
+      body += `<h4 class="sub-h">${t().films}</h4>`;
+      body += `<div class="films">${[...films.values()].map((g) => filmCard(g, V[g[0].venue_id])).join("")}</div>`;
+    }
+    return `<section class="day" id="day-${day.key}" data-key="${day.key}">
+      <header class="day-head"><span class="day-num">${fmt({ day: "numeric" }).format(d)}</span>
+        <span class="day-wd">${esc(wd)}</span><span class="day-ct">${t().events(day.items.length)}</span>
+        ${isToday ? `<span class="today-badge">${t().today}</span>` : ""}</header>
+      <div class="day-body">${body}</div></section>`;
+  }
+
+  function monthHTML(key) {
+    const d = keyToDate(key);
+    const month = fmt({ month: "long" }).format(d);
+    return `<h2 class="month" id="month-${key.slice(0, 7)}">${esc(month)}<small>${key.slice(0, 4)}</small></h2>`;
+  }
+
+  // ------------------------------------------------------------------ programme (rendered in chunks)
+  let observer;
+  function renderProgramme() {
+    const box = $("#programme");
+    const msg = $("#status-msg");
+    state.rendered = 0;
+    box.innerHTML = "";
+    if (!state.data.events.length) { msg.textContent = t().noData; msg.hidden = false; return; }
+    if (!state.days.length) { msg.textContent = t().noMatch; msg.hidden = false; return; }
+    msg.hidden = true;
+    renderMore(DAYS_PER_CHUNK);
+  }
+
+  function renderMore(n) {
+    const box = $("#programme");
+    const V = venueMap();
+    const end = Math.min(state.days.length, state.rendered + n);
+    let html = "";
+    for (let i = state.rendered; i < end; i++) {
+      const key = state.days[i].key;
+      const prev = i > 0 ? state.days[i - 1].key : null;
+      if (!prev || prev.slice(0, 7) !== key.slice(0, 7)) html += monthHTML(key);
+      html += dayHTML(state.days[i], V);
+    }
+    $(".more-sentinel", box)?.remove();
+    box.insertAdjacentHTML("beforeend", html + (end < state.days.length ? '<div class="more-sentinel"></div>' : ""));
+    state.rendered = end;
+    const s = $(".more-sentinel", box);
+    if (s) {
+      observer?.disconnect();
+      observer = new IntersectionObserver((ents) => { if (ents.some((x) => x.isIntersecting)) renderMore(DAYS_PER_CHUNK); }, { rootMargin: "1200px" });
+      observer.observe(s);
+    }
+  }
+
+  function jumpTo(key) {
+    const idx = state.days.findIndex((d) => d.key >= key);
+    if (idx < 0) return;
+    if (idx >= state.rendered) renderMore(idx - state.rendered + 3);
+    const el = document.getElementById(`day-${state.days[idx].key}`);
+    if (!el) return;
+    const barH = $(".bar").getBoundingClientRect().height;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - barH - 6, behavior: "smooth" });
+  }
+
+  // ------------------------------------------------------------------ chrome (filters, strip, footer)
+  function renderStrip() {
+    const strip = $("#strip");
+    const today = todayKey();
+    let html = "", lastMonth = "";
+    for (const day of state.days.slice(0, 120)) {
+      const d = keyToDate(day.key);
+      const m = day.key.slice(0, 7);
+      if (m !== lastMonth) { html += `<span class="m">${esc(fmt({ month: "short" }).format(d))}</span>`; lastMonth = m; }
+      html += `<a href="#day-${day.key}" data-key="${day.key}" class="${day.key === today ? "today" : ""}">
+        <span class="wd">${t().wd[d.getUTCDay()]}</span><span class="dn">${d.getUTCDate()}</span><span class="ct">${day.items.length}</span></a>`;
+    }
+    strip.innerHTML = html;
+  }
+
+  function renderChips() {
+    const V = state.data.venues;
+    const today = todayKey();
+    const counts = {};
+    for (const e of state.data.events) if (e.start.slice(0, 10) >= today) counts[e.venue_id] = (counts[e.venue_id] || 0) + 1;
+    const cats = ["theatre", "opera", "concert", "cinema"].filter((c) => V.some((v) => v.category === c));
+    $("#cats").innerHTML = cats.map((c) => `<button class="chip" type="button" data-cat="${c}" aria-pressed="${state.cats.has(c)}">
+      ${icon(c)}${esc(t().cat[c])}</button>`).join("");
+    $("#venues").innerHTML = V.map((v) => `<button class="chip" type="button" data-venue="${esc(v.id)}" aria-pressed="${state.venues.has(v.id)}">
+      <span class="bub" style="background:${esc(v.color)}">${esc((v.short || "").slice(0, 4))}</span>${esc(v.name)}
+      <span class="n">${counts[v.id] || 0}</span></button>`).join("");
+  }
+
+  function renderChrome() {
+    document.documentElement.lang = state.lang;
+    $("#brand-sub").textContent = t().sub;
+    $("#q").placeholder = t().search;
+    $("#q").setAttribute("aria-label", t().search);
+    $("#today").textContent = t().today;
+    $("#today").setAttribute("aria-pressed", state.todayOnly);
+    $("#available").textContent = t().available;
+    $("#available").setAttribute("aria-pressed", state.availableOnly);
+    $("#filter-toggle").textContent = t().filters;
+    $("#clear").textContent = t().clear;
+    $("#date").setAttribute("aria-label", t().jump);
+    $("#date").title = t().jump;
+    $("#sources-h").textContent = t().sources;
+    $("#fine").textContent = t().fine;
+    document.querySelectorAll(".lang button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.lang === state.lang));
+    const pv = $("#preview-note");
+    if (pv) pv.querySelector(".wrap").textContent = t().preview;
+
+    const gen = state.data.generated_at ? new Date(state.data.generated_at) : null;
+    const up = $("#updated");
+    if (gen) {
+      const stale = Date.now() - gen.getTime() > 48 * 3600e3;
+      up.textContent = `${t().updated}: ${fmt({ day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(gen)}${stale ? ` · ${t().stale}` : ""}`;
+      up.classList.toggle("stale", stale);
+    } else up.textContent = "";
+
+    // sources
+    const today = todayKey();
+    const counts = {};
+    for (const e of state.data.events) if (e.start.slice(0, 10) >= today) counts[e.venue_id] = (counts[e.venue_id] || 0) + 1;
+    const st = state.status?.venues || {};
+    $("#sources").innerHTML = state.data.venues.map((v) => {
+      const s = st[v.id];
+      const n = counts[v.id] || 0;
+      let label = n ? t().ok(n) : t().none;
+      if (s && s.ok === false && s.kept_previous) label = t().kept(n);
+      const bad = !n || (s && s.ok === false);
+      return `<div class="src"><i style="background:${esc(v.color)}"></i><a href="${esc(v.home)}" target="_blank" rel="noopener">${esc(v.name)}</a>
+        <span class="n ${bad ? "bad" : ""}">${esc(label)}</span></div>`;
+    }).join("");
+    const dates = state.data.events.map((e) => e.start.slice(0, 10)).filter((k) => k >= today).sort();
+    const dateEl = $("#date");
+    if (dates.length) { dateEl.min = dates[0]; dateEl.max = dates[dates.length - 1]; }
+  }
+
+  function refresh({ keepScroll = false } = {}) {
+    buildDays();
+    renderChips();
+    renderChrome();
+    renderStrip();
+    renderProgramme();
+    if (!keepScroll) window.scrollTo({ top: 0 });
+    setBarHeight();
+  }
+
+  function setBarHeight() {
+    const h = $(".bar").getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--bar-h", `${Math.round(h) + 12}px`);
+  }
+
+  function syncStripToScroll() {
+    const barH = $(".bar").getBoundingClientRect().height;
+    let current = null;
+    for (const sec of document.querySelectorAll(".day")) {
+      if (sec.getBoundingClientRect().top - barH - 20 <= 0) current = sec.dataset.key; else break;
+    }
+    document.querySelectorAll("#strip a").forEach((a) => a.classList.toggle("current", a.dataset.key === current));
+    const active = $(`#strip a[data-key="${current}"]`);
+    if (active) {
+      const strip = $("#strip");
+      const r = active.getBoundingClientRect(), s = strip.getBoundingClientRect();
+      if (r.left < s.left || r.right > s.right) strip.scrollLeft += r.left - s.left - s.width / 3;
+    }
+  }
+
+  // ------------------------------------------------------------------ events
+  function bind() {
+    document.querySelectorAll(".lang button").forEach((b) => b.addEventListener("click", () => {
+      state.lang = b.dataset.lang; store.set("lang", state.lang); refresh({ keepScroll: true });
+    }));
+    let qTimer;
+    $("#q").addEventListener("input", (ev) => {
+      clearTimeout(qTimer);
+      qTimer = setTimeout(() => { state.q = ev.target.value.trim().toLowerCase(); refresh({ keepScroll: true }); }, 180);
+    });
+    $("#today").addEventListener("click", () => { state.todayOnly = !state.todayOnly; refresh(); });
+    $("#available").addEventListener("click", () => { state.availableOnly = !state.availableOnly; store.set("available", state.availableOnly); refresh({ keepScroll: true }); });
+    $("#cats").addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-cat]"); if (!b) return;
+      const c = b.dataset.cat; state.cats.has(c) ? state.cats.delete(c) : state.cats.add(c);
+      store.set("cats", [...state.cats]); refresh();
+    });
+    $("#venues").addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-venue]"); if (!b) return;
+      const v = b.dataset.venue; state.venues.has(v) ? state.venues.delete(v) : state.venues.add(v);
+      store.set("venues", [...state.venues]); refresh();
+    });
+    $("#clear").addEventListener("click", () => {
+      state.venues.clear(); state.cats.clear(); state.q = ""; state.todayOnly = false; state.availableOnly = false;
+      $("#q").value = ""; store.set("venues", []); store.set("cats", []); store.set("available", false); refresh();
+    });
+    $("#filter-toggle").addEventListener("click", (ev) => {
+      const open = $("#more-filters").classList.toggle("open");
+      ev.currentTarget.setAttribute("aria-expanded", open); setBarHeight();
+    });
+    $("#date").addEventListener("change", (ev) => { if (ev.target.value) jumpTo(ev.target.value); });
+    $("#strip").addEventListener("click", (ev) => {
+      const a = ev.target.closest("a[data-key]"); if (!a) return;
+      ev.preventDefault(); jumpTo(a.dataset.key);
+    });
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(() => { syncStripToScroll(); ticking = false; });
+    }, { passive: true });
+    window.addEventListener("resize", setBarHeight);
+  }
+
+  // ------------------------------------------------------------------ boot
+  async function load() {
+    const embedded = document.getElementById("embedded-data");
+    if (embedded && embedded.textContent.trim()) {
+      const all = JSON.parse(embedded.textContent);
+      return { data: all.events ? all : all.data, status: all.status || null };
+    }
+    const res = await fetch("data/events.json", { cache: "no-cache" });
+    if (!res.ok) throw new Error(`events.json: HTTP ${res.status}`);
+    const data = await res.json();
+    let status = null;
+    try { const r = await fetch("data/status.json", { cache: "no-cache" }); if (r.ok) status = await r.json(); } catch { /* optional */ }
+    return { data, status };
+  }
+
+  async function init() {
+    $("#status-msg").textContent = T[state.lang].loading;
+    try {
+      const { data, status } = await load();
+      state.data = data; state.status = status;
+    } catch (err) {
+      console.error(err);
+      state.data = { generated_at: null, venues: [], events: [] };
+    }
+    if (!state.data.venues?.length) state.data.venues = [];
+    // forget saved filters for venues that no longer exist
+    const ids = new Set(state.data.venues.map((v) => v.id));
+    state.venues = new Set([...state.venues].filter((v) => ids.has(v)));
+    if (location.hash === "#heute" || location.hash === "#today") state.todayOnly = true;
+    bind();
+    refresh();
+    const m = location.hash.match(/^#day-(\d{4}-\d{2}-\d{2})$/);
+    if (m) setTimeout(() => jumpTo(m[1]), 50);
+  }
+
+  init();
+})();
+
+</script>
+</body>
+</html>
