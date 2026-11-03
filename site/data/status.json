@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-03T13:54:17+00:00",
+ "generated_at": "2026-11-03T14:02:05+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
@@ -23,7 +23,7 @@
   },
   "schwere-reiter": {
    "ok": true,
-   "count": 31
+   "count": 32
   },
   "hochx": {
    "ok": true,
@@ -53,7 +53,7 @@
   },
   "gaertnerplatz": {
    "ok": false,
-   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/spielplan/index.html?ajax=1&offset=0&letzterTermin=0 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x74152a4ca480>, 'Connection to ",
+   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/spielplan/index.html?ajax=1&offset=0&letzterTermin=0 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x705590e874d0>, 'Connection to ",
    "kept_previous": true,
    "count": 256
   },
