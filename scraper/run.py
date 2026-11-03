@@ -14,6 +14,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from common import TZ  # noqa: E402
+from images import add_images  # noqa: E402
 from venues import SCRAPERS  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -26,6 +27,14 @@ def load_previous():
         return json.loads((OUT / "events.json").read_text())["events"]
     except (FileNotFoundError, KeyError, json.JSONDecodeError):
         return []
+
+
+def drop_hall_duplicates(events):
+    """The Gasteig listing also contains the Philharmoniker's own Isarphilharmonie concerts.
+    Keep the orchestra's entry (more detail) and drop the hall's copy."""
+    orchestra = {e["start"] for e in events
+                 if e["venue_id"] == "muenchner-philharmoniker" and "isarphilharmonie" in (e["stage"] or "").lower()}
+    return [e for e in events if not (e["venue_id"] == "isarphilharmonie" and e["start"] in orchestra)]
 
 
 def main(only):
@@ -54,7 +63,10 @@ def main(only):
 
     # same performance listed twice -> keep one
     unique = {e["id"]: e for e in events}
+    events = drop_hall_duplicates(list(unique.values()))
+    unique = {e["id"]: e for e in events}
     events = sorted(unique.values(), key=lambda e: (e["start"], e["venue_id"], e["title"]))
+    add_images(events)
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "events.json").write_text(json.dumps(

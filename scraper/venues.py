@@ -1,7 +1,10 @@
 """One scraper per venue. Each returns a list of event dicts (see common.event)."""
+import difflib
+import html
 import json
 import re
 from datetime import datetime, timedelta
+from urllib.parse import quote, unquote
 
 from bs4 import BeautifulSoup
 
@@ -161,27 +164,70 @@ def volkstheater():
 
 
 # ---------------------------------------------------------------- Deutsches Theater (via its ticket shop)
+def _norm_title(s):
+    s = html.unescape(s).lower().replace("´", "'").replace("’", "'")
+    s = re.sub(r"\b(disney|20\d\d)\b", " ", s)
+    return re.sub(r"[^a-z0-9äöüß]+", " ", s).strip()
+
+
+def _dt_show_pages():
+    """Title -> production page, from the website's show lists."""
+    pages = {}
+    for kind in ("mshows", "ashows"):
+        for n in range(1, 10):
+            r = session.get(f"https://www.deutsches-theater.de/wp-json/wp/v2/{kind}", timeout=60,
+                            params={"per_page": 100, "page": n, "_fields": "link,title"})
+            if r.status_code != 200 or not r.json():
+                break
+            for x in r.json():
+                pages.setdefault(_norm_title(x["title"]["rendered"]), x["link"])
+            if n >= int(r.headers.get("X-WP-TotalPages", 1)):
+                break
+    return pages
+
+
+def _dt_match(title, pages):
+    key = _norm_title(title)
+    if key in pages:
+        return pages[key]
+    best = difflib.get_close_matches(key, pages.keys(), n=1, cutoff=0.8)
+    if best:
+        return pages[best[0]]
+    # shop titles often add a subtitle: "Günther Grauer - Musikalische Erinnerungen: …"
+    prefix = [k for k in pages if len(k) >= 8 and (key.startswith(k) or k.startswith(key))]
+    return pages[max(prefix, key=len)] if prefix else None
+
+
+DT_SUFFIX = re.compile(r"\s+-\s+(Preview|Premiere)$", re.I)
+
+
 def deutsches_theater():
     shop = "https://tickets.muenchenticket.de/shop/214"
     page = soup(shop, timeout=120)
+    try:
+        show_pages = _dt_show_pages()
+    except Exception as exc:  # covers and info links are optional
+        print(f"  deutsches-theater: show pages unavailable: {exc}")
+        show_pages = {}
     out = []
     for box in page.select(".event-container"):
         ld = box.find("script", type="application/ld+json")
         if not ld:
             continue
         data = json.loads(ld.string)
-        name = data.get("name", "")
+        name = html.unescape(data.get("name", ""))
         if not data.get("startDate") or re.search(r"gutschein|showcard", name, re.I):
             continue
+        suffix = DT_SUFFIX.search(name)
+        title = DT_SUFFIX.sub("", name)
         place = data.get("location", {}).get("name", "")
-        img = box.select_one("img")
         out.append(event(
-            "deutsches-theater", name, parse_iso(data["startDate"]),
+            "deutsches-theater", title, parse_iso(data["startDate"]),
             stage=place.split(" - ", 1)[1] if " - " in place else None,
-            subtitle=text(box.select_one(".details-text")),
+            subtitle=html.unescape(text(box.select_one(".details-text"))),
+            tags=[suffix.group(1).capitalize()] if suffix else [],
             status=_status_from_text(text(box.select_one(".event-state"))),
-            image=absolute(shop, img.get("src")) if img else None,
-            url=data.get("url"),
+            url=_dt_match(title, show_pages) or data.get("url"),
             ticket_url=data.get("url"),
         ))
     return out
@@ -242,6 +288,60 @@ def isarphilharmonie():
     return list(out.values())
 
 
+# ---------------------------------------------------------------- Münchner Philharmoniker
+MPHIL_PARAM = "tx_mphilconcerts_konzertkalender26"
+# tour venues are listed as "Gastkonzerte"; a few out-of-town ones are not
+MPHIL_NOT_MUNICH = re.compile(r"ottobeuren|aix-en|wien|hamburg|new york|paris|frankfurt|baden-baden", re.I)
+
+
+def _surname(name):
+    return name.split()[-1] if name else ""
+
+
+def muenchner_philharmoniker():
+    base = "https://www.mphil.de/kalender"
+    out = []
+    for offset in range(0, 600, 15):  # the calendar's own "Mehr laden" pages
+        page = soup(base, params={
+            f"{MPHIL_PARAM}[action]": "concertCalendarLoadConcerts", f"{MPHIL_PARAM}[controller]": "Opas",
+            f"{MPHIL_PARAM}[cUid]": "4852", "type": "1726500002", f"{MPHIL_PARAM}[offset]": offset,
+        })
+        items = page.select(".m-mphil-concertlist__item")
+        if not items:
+            break
+        for it in items:
+            tm = it.select_one("time[datetime]")
+            stage = text(it.select_one(".m-mphil-concertlist__venue"))
+            cats = list(dict.fromkeys(text(x) for x in it.select(".m-mphil-concertlist__cat")))
+            if not tm or "Gastkonzerte" in cats or MPHIL_NOT_MUNICH.search(stage):
+                continue
+            headline = text(it.select_one(".m-mphil-concertlist__headline"))
+            composers = list(dict.fromkeys(_surname(text(x)) for x in it.select(".m-mphil-concertlist__work-composer")))
+            people = [
+                f"{text(p.select_one('.m-mphil-concertlist__person-link-title')) or text(p.select_one('a'))}"
+                + (f" ({text(p.select_one('.m-mphil-concertlist__instrument'))})" if p.select_one(".m-mphil-concertlist__instrument") else "")
+                for p in it.select(".m-mphil-concertlist__person")
+            ]
+            title = headline or " / ".join(c for c in composers if c) or "Münchner Philharmoniker"
+            subtitle = text(it.select_one(".m-mphil-concertlist__subheadline")) or " · ".join(x for x in people if x.strip())
+            detail = it.select_one("a.m-mphil-concertlist__detail-link")
+            buttons = it.select(".m-mphil-concertlist__buttons a[href^='http']")
+            tix = next((b for b in buttons if "gruppe" not in text(b).lower()), None)
+            src = it.select_one("figure source[srcset]:not([type])") or it.select_one("figure img")
+            img = (src.get("srcset") or src.get("src") or "").split(",")[0].split()[0] if src else None
+            out.append(event(
+                "muenchner-philharmoniker", title, parse_iso(tm["datetime"].replace(" ", "T")),
+                stage=stage,
+                subtitle=subtitle,
+                genre=cats[0] if cats else "Konzert",
+                status=_status_from_text(text(tix)),
+                image=img,
+                url=absolute(base, detail.get("href")) if detail else base,
+                ticket_url=tix.get("href") if tix else None,
+            ))
+    return out
+
+
 # ---------------------------------------------------------------- Bayerische Staatsoper
 def staatsoper():
     base = "https://www.staatsoper.de/spielplan"
@@ -271,29 +371,41 @@ def staatsoper():
 
 
 # ---------------------------------------------------------------- Museum Lichtspiele
+def _as_list(x):
+    return x if isinstance(x, list) else [x]
+
+
 def museum_lichtspiele():
-    base = "https://www.museum-lichtspiele.de/programm?filter=all"
-    page = soup(base)
-    works, out = {}, []
-    for sc in page.find_all("script", type="application/ld+json"):
-        data = json.loads(sc.string or "[]")
-        for e in data if isinstance(data, list) else [data]:
-            if e.get("@type") != "ScreeningEvent":
-                continue
-            w = e.get("workPresented") or {}
-            if w.get("name"):
-                works[w["@id"]] = w
-            w = works.get(w.get("@id"), w)
-            start, end = parse_iso(e["startDate"]), e.get("endDate")
-            fmt = (e.get("videoFormat") or "").split("|")
-            out.append(event(
-                "museum-lichtspiele", w.get("name") or e["name"], start,
-                genre="Film",
-                tags=[x for x in fmt if x and x not in ("2D",)],
-                duration_min=int((parse_iso(end) - start).total_seconds() // 60) if end else None,
-                image=e.get("image") or w.get("image"),
-                url=e.get("url"),
-            ))
+    """The page embeds its whole programme as `programm = {...}` for its own JavaScript."""
+    base = "https://www.museum-lichtspiele.de"
+    page = get(f"{base}/programm?filter=all").text
+    m = re.search(r"\bprogramm\s*=\s*", page)
+    if not m:
+        raise RuntimeError("programme data not found")
+    data, _ = json.JSONDecoder().raw_decode(page[m.end():])
+    out = []
+    for film in data.get("filme", {}).values():
+        facts = film["filmfakten"]
+        title = facts.get("titel") or ""
+        poster = (facts.get("plakat_ids") or {}).get("id")
+        runtime = facts.get("laufzeit")
+        tags = [x for x in str(facts.get("Versionsmarker") or "").split("|") if x and x != "2D"]
+        for group in _as_list(film.get("vorstellungen") or []):
+            for shows in (group.get("termine") or {}).values():
+                for s in _as_list(shows):
+                    y, mo, d = map(int, s["datum"].split("-"))
+                    h, mi = map(int, s["zeit"].split(":"))
+                    link = s.get("link_mobile")
+                    out.append(event(
+                        "museum-lichtspiele", title, local_dt(y, mo, d, h, mi),
+                        stage=s.get("saal_bezeichnung") or None,
+                        genre="Film",
+                        tags=tags,
+                        duration_min=int(runtime) if str(runtime).isdigit() else None,
+                        image=f"{base}/images/Breite_400px_RGB/{poster}" if poster else None,
+                        url=f"{base}/detail/{facts['idf']}/{quote(title.replace(' ', '_'))}",
+                        ticket_url=unquote(link) if isinstance(link, str) else None,
+                    ))
     return out
 
 
@@ -317,7 +429,8 @@ def city_kinos():
                 genre="Film",
                 tags=sf.get("formats") or [],
                 duration_min=f.get("runtime"),
-                image=f"https:{img}?w=400" if img else None,
+                # Contentful crops the wide still to poster format around faces
+                image=f"https:{img}?w=300&h=450&fit=fill&f=faces&fm=jpg&q=80" if img else None,
                 url=f"https://www.city-kinos.de/filme/{f['slug']}" if f.get("slug") else base,
             ))
     return out
@@ -329,6 +442,7 @@ SCRAPERS = {
     "volkstheater": volkstheater,
     "deutsches-theater": deutsches_theater,
     "isarphilharmonie": isarphilharmonie,
+    "muenchner-philharmoniker": muenchner_philharmoniker,
     "bayerische-staatsoper": staatsoper,
     "museum-lichtspiele": museum_lichtspiele,
     "city-kino-atelier": city_kinos,

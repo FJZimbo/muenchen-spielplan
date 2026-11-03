@@ -40,6 +40,14 @@
     "home": "https://www.gasteig.de/veranstaltungen/?room=isarphilharmonie"
   },
   {
+    "id": "muenchner-philharmoniker",
+    "name": "Münchner Philharmoniker",
+    "short": "MPh",
+    "category": "concert",
+    "color": "#b8336a",
+    "home": "https://www.mphil.de/kalender"
+  },
+  {
     "id": "bayerische-staatsoper",
     "name": "Bayerische Staatsoper",
     "short": "BSO",

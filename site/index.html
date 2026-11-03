@@ -111,6 +111,8 @@ button, input, select { font: inherit; color: inherit; }
 }
 .chip .n { font-weight: 500; opacity: .6; font-variant-numeric: tabular-nums; }
 .date-jump { border: 1.5px solid var(--line); border-radius: 999px; padding: 5px 10px; background: var(--paper); font-size: 13.5px; }
+.time-from { cursor: pointer; font-weight: 600; }
+.time-from.active { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
 .chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; min-width: 0; }
 .chips::-webkit-scrollbar { display: none; }
 .more-filters { display: grid; gap: 8px; }
@@ -160,7 +162,9 @@ main { padding-block: 8px 48px; }
   border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
 }
 .media { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: var(--soft); overflow: hidden; display: block; }
-.media img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s ease; }
+/* the cover sits above the venue placeholder, which only shows when there is no image or it fails to load */
+.media img, .poster img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+.media img { transition: transform .4s ease; }
 .ev:hover .media img { transform: scale(1.03); }
 .ph {
   position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
@@ -211,11 +215,10 @@ main { padding-block: 8px 48px; }
 /* cinema */
 .films { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
 .film {
-  display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; min-width: 0;
+  display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; min-width: 0;
   border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; background: var(--paper);
 }
 .poster { position: relative; aspect-ratio: 2 / 3; max-width: 100%; border-radius: 3px; overflow: hidden; background: var(--soft); }
-.poster img { width: 100%; height: 100%; object-fit: cover; }
 .poster .ph { padding: 6px; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
 .poster .ph .ph-short { font-size: 15px; }
 .poster .ph .ph-ico { width: 18px; height: 18px; }
@@ -293,6 +296,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       <button class="toggle" id="today" type="button" aria-pressed="false">Heute</button>
       <button class="toggle" id="available" type="button" aria-pressed="false">Nur mit Karten</button>
       <input class="date-jump" id="date" type="date">
+      <select class="date-jump time-from" id="from"></select>
       <button class="chip filter-toggle" id="filter-toggle" type="button" aria-expanded="false" aria-controls="more-filters">Filter</button>
     </div>
     <div class="more-filters" id="more-filters">
@@ -322,6 +326,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 
   const TZ = "Europe/Berlin";
   const DAYS_PER_CHUNK = 7;
+  const FROM_HOURS = [12, 14, 16, 17, 18, 19, 20, 21];
 
   // ------------------------------------------------------------------ text
   const T = {
@@ -331,6 +336,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       search: "Titel, Haus, Bühne suchen",
       today: "Heute", available: "Nur mit Karten", filters: "Filter", clear: "Zurücksetzen",
       jump: "Zu Datum springen",
+      anyTime: "Jede Uhrzeit", fromTime: (h) => `ab ${h} Uhr`, timeLabel: "Beginn ab Uhrzeit",
       cat: { theatre: "Theater", opera: "Oper", concert: "Konzert", cinema: "Kino" },
       stageEvents: "Bühne & Konzert", films: "Kino",
       events: (n) => `${n} ${n === 1 ? "Termin" : "Termine"}`,
@@ -352,6 +358,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       search: "Search title, venue, stage",
       today: "Today", available: "Tickets available", filters: "Filters", clear: "Reset",
       jump: "Jump to date",
+      anyTime: "Any time", fromTime: (h) => `from ${h > 12 ? `${h - 12} pm` : h === 12 ? "noon" : `${h} am`}`, timeLabel: "Starting from",
       cat: { theatre: "Theatre", opera: "Opera", concert: "Concert", cinema: "Cinema" },
       stageEvents: "Stage & concerts", films: "Cinema",
       events: (n) => `${n} ${n === 1 ? "event" : "events"}`,
@@ -377,6 +384,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     "Kabarett": "Cabaret", "Festspiele": "Festival", "Premiere": "Premiere", "Uraufführung": "World premiere",
     "Wiederaufnahme": "Revival", "Zum letzten Mal": "Final performance", "Gastspiel": "Guest performance",
     "Publikumsgespräch": "Post-show talk", "Party": "Party",
+    "Symphoniekonzerte": "Symphony concert", "Kammerkonzerte": "Chamber concert",
   };
 
   const ICONS = {
@@ -400,6 +408,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     cats: new Set(store.get("cats", [])),
     todayOnly: false,
     availableOnly: store.get("available", false),
+    fromHour: store.get("from", null),   // only events starting at or after this hour
     data: null,
     status: null,
     days: [],        // [{key, items}]
@@ -427,6 +436,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     if (state.venues.size && !state.venues.has(e.venue_id)) return false;
     if (state.cats.size && !state.cats.has(v.category)) return false;
     if (state.availableOnly && (e.status === "sold_out" || e.status === "cancelled")) return false;
+    if (state.fromHour !== null && (e.time_tbd || hhmm(e.start) < `${String(state.fromHour).padStart(2, "0")}:00`)) return false;
     if (state.q) {
       const hay = `${e.title} ${e.subtitle || ""} ${v.name} ${e.stage || ""} ${e.genre || ""} ${(e.tags || []).join(" ")}`.toLowerCase();
       if (!state.q.split(/\s+/).every((w) => hay.includes(w))) return false;
@@ -637,6 +647,13 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     $("#today").setAttribute("aria-pressed", state.todayOnly);
     $("#available").textContent = t().available;
     $("#available").setAttribute("aria-pressed", state.availableOnly);
+    const from = $("#from");
+    from.innerHTML = `<option value="">${esc(t().anyTime)}</option>` +
+      FROM_HOURS.map((h) => `<option value="${h}">${esc(t().fromTime(h))}</option>`).join("");
+    from.value = state.fromHour ?? "";
+    from.classList.toggle("active", state.fromHour !== null);
+    from.setAttribute("aria-label", t().timeLabel);
+    from.title = t().timeLabel;
     $("#filter-toggle").textContent = t().filters;
     $("#clear").textContent = t().clear;
     $("#date").setAttribute("aria-label", t().jump);
@@ -716,6 +733,10 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     });
     $("#today").addEventListener("click", () => { state.todayOnly = !state.todayOnly; refresh(); });
     $("#available").addEventListener("click", () => { state.availableOnly = !state.availableOnly; store.set("available", state.availableOnly); refresh({ keepScroll: true }); });
+    $("#from").addEventListener("change", (ev) => {
+      state.fromHour = ev.target.value === "" ? null : Number(ev.target.value);
+      store.set("from", state.fromHour); refresh({ keepScroll: true });
+    });
     $("#cats").addEventListener("click", (ev) => {
       const b = ev.target.closest("[data-cat]"); if (!b) return;
       const c = b.dataset.cat; state.cats.has(c) ? state.cats.delete(c) : state.cats.add(c);
@@ -727,8 +748,8 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       store.set("venues", [...state.venues]); refresh();
     });
     $("#clear").addEventListener("click", () => {
-      state.venues.clear(); state.cats.clear(); state.q = ""; state.todayOnly = false; state.availableOnly = false;
-      $("#q").value = ""; store.set("venues", []); store.set("cats", []); store.set("available", false); refresh();
+      state.venues.clear(); state.cats.clear(); state.q = ""; state.todayOnly = false; state.availableOnly = false; state.fromHour = null;
+      $("#q").value = ""; store.set("venues", []); store.set("cats", []); store.set("available", false); store.set("from", null); refresh();
     });
     $("#filter-toggle").addEventListener("click", (ev) => {
       const open = $("#more-filters").classList.toggle("open");

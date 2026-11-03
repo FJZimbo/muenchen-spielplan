@@ -1,41 +1,9 @@
 {
- "generated_at": "2026-11-03T12:29:04+00:00",
+ "generated_at": "2026-11-03T12:45:12+00:00",
  "venues": {
-  "residenztheater": {
+  "muenchner-philharmoniker": {
    "ok": true,
-   "count": 195
-  },
-  "kammerspiele": {
-   "ok": true,
-   "count": 206
-  },
-  "volkstheater": {
-   "ok": true,
-   "count": 111
-  },
-  "deutsches-theater": {
-   "ok": true,
-   "count": 430
-  },
-  "isarphilharmonie": {
-   "ok": true,
-   "count": 192
-  },
-  "bayerische-staatsoper": {
-   "ok": false,
-   "error": "HTTPError: 403 Client Error: Forbidden for url: https://www.staatsoper.de/spielplan",
-   "kept_previous": false,
-   "count": 0
-  },
-  "museum-lichtspiele": {
-   "ok": false,
-   "error": "RuntimeError: no events found (page layout changed?)",
-   "kept_previous": true,
-   "count": 58
-  },
-  "city-kino-atelier": {
-   "ok": true,
-   "count": 194
+   "count": 92
   }
  }
 }
