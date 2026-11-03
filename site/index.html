@@ -394,6 +394,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     "Wiederaufnahme": "Revival", "Zum letzten Mal": "Final performance", "Gastspiel": "Guest performance",
     "Publikumsgespräch": "Post-show talk", "Party": "Party",
     "Symphoniekonzerte": "Symphony concert", "Kammerkonzerte": "Chamber concert",
+    "Musik": "Music", "Operette": "Operetta",
   };
 
   const ICONS = {
@@ -534,6 +535,17 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       </div></article>`;
   }
 
+  // "Garching · Hörsaal MW1801" -> city in bold; a stage that only repeats the venue name is left out
+  function filmMeta(stage, dur, v) {
+    const parts = [];
+    if (stage && !v.name.includes(stage)) {
+      const [place, ...room] = stage.split(" · ");
+      parts.push(room.length ? `<b>${esc(place)}</b> · ${esc(room.join(" · "))}` : esc(stage));
+    }
+    if (dur) parts.push(esc(durationText(dur)));
+    return parts.length ? `<p class="meta">${parts.map((p) => `<span>${p}</span>`).join("")}</p>` : "";
+  }
+
   function filmCard(group, v) {
     const first = group[0];
     const now = new Date();
@@ -556,7 +568,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       <div class="film-body">
         <span class="venue">${venueBubble(v)}<b>${esc(v.name)}</b></span>
         <h3 class="ev-title"><a href="${esc(first.url || v.home)}" target="_blank" rel="noopener">${esc(first.title)}</a></h3>
-        ${dur ? `<p class="meta"><span>${esc(durationText(dur))}</span></p>` : ""}
+        ${filmMeta(first.stage, dur, v)}
         <div class="times">${times}</div>
       </div></article>`;
   }

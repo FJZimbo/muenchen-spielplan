@@ -29,7 +29,7 @@ def _og_image(url):
     if not src or GENERIC.search(src):
         return ""
     src = urljoin(url, src)
-    return re.sub(r"([?&]w=)\d+", r"\g<1>800", src)  # Kammerspiele serves 2000px by default
+    return re.sub(r"([?&]w=)\d+", r"\g<1>400", src)  # Kammerspiele serves 2000px; it only accepts some widths
 
 
 def add_images(events):

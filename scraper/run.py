@@ -30,10 +30,10 @@ def load_previous():
 
 
 def drop_hall_duplicates(events):
-    """The Gasteig listing also contains the Philharmoniker's own Isarphilharmonie concerts.
+    """The Gasteig listing also contains the orchestras' own Isarphilharmonie concerts.
     Keep the orchestra's entry (more detail) and drop the hall's copy."""
     orchestra = {e["start"] for e in events
-                 if e["venue_id"] == "muenchner-philharmoniker" and "isarphilharmonie" in (e["stage"] or "").lower()}
+                 if e["venue_id"] in ("muenchner-philharmoniker", "brso") and "isarphilharmonie" in (e["stage"] or "").lower()}
     return [e for e in events if not (e["venue_id"] == "isarphilharmonie" and e["start"] in orchestra)]
 
 

@@ -22,7 +22,7 @@
     "name": "Münchner Volkstheater",
     "short": "VT",
     "category": "theatre",
-    "color": "#ff5a1f",
+    "color": "#ff8c00",
     "home": "https://www.muenchner-volkstheater.de/programm/spielplan",
     "logo": "logos/volkstheater.png"
   },
@@ -34,6 +34,33 @@
     "color": "#7a1230",
     "home": "https://www.deutsches-theater.de/programm/",
     "logo": "logos/deutsches-theater.png"
+  },
+  {
+    "id": "metropoltheater",
+    "name": "Metropoltheater",
+    "short": "MET",
+    "category": "theatre",
+    "color": "#1d2b4f",
+    "home": "https://www.metropoltheater.com/spielplan/aktuell/",
+    "logo": "logos/metropoltheater.png"
+  },
+  {
+    "id": "schwere-reiter",
+    "name": "schwere reiter",
+    "short": "SR",
+    "category": "theatre",
+    "color": "#d4e600",
+    "home": "https://schwerereiter.de/",
+    "logo": "logos/schwere-reiter.png"
+  },
+  {
+    "id": "hochx",
+    "name": "HochX",
+    "short": "HX",
+    "category": "theatre",
+    "color": "#00bbff",
+    "home": "https://theater-hochx.de/spielplan",
+    "logo": "logos/hochx.png"
   },
   {
     "id": "isarphilharmonie",
@@ -54,12 +81,39 @@
     "logo": "logos/muenchner-philharmoniker.png"
   },
   {
+    "id": "brso",
+    "name": "BR Symphonieorchester",
+    "short": "BRSO",
+    "category": "concert",
+    "color": "#0a6963",
+    "home": "https://www.brso.de/konzerte-tickets/konzertkalender/",
+    "logo": "logos/brso.png"
+  },
+  {
+    "id": "muffatwerk",
+    "name": "Muffatwerk",
+    "short": "MUF",
+    "category": "concert",
+    "color": "#8a8f2a",
+    "home": "https://www.muffatwerk.de/de/events",
+    "logo": "logos/muffatwerk.png"
+  },
+  {
     "id": "bayerische-staatsoper",
     "name": "Bayerische Staatsoper",
     "short": "BSO",
     "category": "opera",
     "color": "#8a6d1d",
     "home": "https://www.staatsoper.de/spielplan"
+  },
+  {
+    "id": "gaertnerplatz",
+    "name": "Staatstheater am Gärtnerplatz",
+    "short": "GTP",
+    "category": "opera",
+    "color": "#e53517",
+    "home": "https://www.gaertnerplatztheater.de/de/spielplan/index.html",
+    "logo": "logos/gaertnerplatz.png"
   },
   {
     "id": "museum-lichtspiele",
@@ -78,5 +132,23 @@
     "color": "#2e8540",
     "home": "https://www.city-kinos.de/filme",
     "logo": "logos/city-kino-atelier.png"
+  },
+  {
+    "id": "cinema-muenchen",
+    "name": "Cinema München",
+    "short": "CIN",
+    "category": "cinema",
+    "color": "#162a47",
+    "home": "https://cinema-muenchen.com/de/programmuebersicht/",
+    "logo": "logos/cinema-muenchen.png"
+  },
+  {
+    "id": "tu-film",
+    "name": "der tu film",
+    "short": "TU",
+    "category": "cinema",
+    "color": "#0065bd",
+    "home": "https://www.tu-film.de/",
+    "logo": "logos/tu-film.png"
   }
 ]
