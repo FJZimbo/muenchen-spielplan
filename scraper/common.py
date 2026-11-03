@@ -7,6 +7,8 @@ from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 TZ = ZoneInfo("Europe/Berlin")
 HEADERS = {
@@ -20,6 +22,10 @@ MONTHS_DE = {
 
 session = requests.Session()
 session.headers.update(HEADERS)
+# sites occasionally time out from GitHub's servers: retry connection errors and 5xx a few times
+_retry = Retry(total=3, connect=3, read=2, backoff_factor=3, status_forcelist=(502, 503, 504), allowed_methods=None)
+session.mount("https://", HTTPAdapter(max_retries=_retry))
+session.mount("http://", HTTPAdapter(max_retries=_retry))
 
 
 def get(url, **kw):
