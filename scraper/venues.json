@@ -4,48 +4,54 @@
     "name": "Residenztheater",
     "short": "Resi",
     "category": "theatre",
-    "color": "#b0182e",
-    "home": "https://www.residenztheater.de/spielplan"
+    "color": "#d60027",
+    "home": "https://www.residenztheater.de/spielplan",
+    "logo": "logos/residenztheater.png"
   },
   {
     "id": "kammerspiele",
     "name": "Münchner Kammerspiele",
     "short": "MK",
     "category": "theatre",
-    "color": "#1f4fa3",
-    "home": "https://www.muenchner-kammerspiele.de/de/programm"
+    "color": "#000000",
+    "home": "https://www.muenchner-kammerspiele.de/de/programm",
+    "logo": "logos/kammerspiele.png"
   },
   {
     "id": "volkstheater",
     "name": "Münchner Volkstheater",
     "short": "VT",
     "category": "theatre",
-    "color": "#e0601b",
-    "home": "https://www.muenchner-volkstheater.de/programm/spielplan"
+    "color": "#ff5a1f",
+    "home": "https://www.muenchner-volkstheater.de/programm/spielplan",
+    "logo": "logos/volkstheater.png"
   },
   {
     "id": "deutsches-theater",
     "name": "Deutsches Theater",
     "short": "DT",
     "category": "theatre",
-    "color": "#7a2d8c",
-    "home": "https://www.deutsches-theater.de/programm/"
+    "color": "#7a1230",
+    "home": "https://www.deutsches-theater.de/programm/",
+    "logo": "logos/deutsches-theater.png"
   },
   {
     "id": "isarphilharmonie",
     "name": "Isarphilharmonie",
     "short": "IP",
     "category": "concert",
-    "color": "#0f7b6c",
-    "home": "https://www.gasteig.de/veranstaltungen/?room=isarphilharmonie"
+    "color": "#ffdd20",
+    "home": "https://www.gasteig.de/veranstaltungen/?room=isarphilharmonie",
+    "logo": "logos/isarphilharmonie.png"
   },
   {
     "id": "muenchner-philharmoniker",
     "name": "Münchner Philharmoniker",
     "short": "MPh",
     "category": "concert",
-    "color": "#b8336a",
-    "home": "https://www.mphil.de/kalender"
+    "color": "#78c4e9",
+    "home": "https://www.mphil.de/kalender",
+    "logo": "logos/muenchner-philharmoniker.png"
   },
   {
     "id": "bayerische-staatsoper",
@@ -60,15 +66,17 @@
     "name": "Museum Lichtspiele",
     "short": "ML",
     "category": "cinema",
-    "color": "#3b3f8f",
-    "home": "https://www.museum-lichtspiele.de/programm?filter=all"
+    "color": "#e6007e",
+    "home": "https://www.museum-lichtspiele.de/programm?filter=all",
+    "logo": "logos/museum-lichtspiele.png"
   },
   {
     "id": "city-kino-atelier",
     "name": "City Kinos & Atelier",
     "short": "City",
     "category": "cinema",
-    "color": "#2f7d32",
-    "home": "https://www.city-kinos.de/filme"
+    "color": "#2e8540",
+    "home": "https://www.city-kinos.de/filme",
+    "logo": "logos/city-kino-atelier.png"
   }
 ]

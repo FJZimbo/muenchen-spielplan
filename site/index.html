@@ -105,10 +105,15 @@ button, input, select { font: inherit; color: inherit; }
 .toggle[aria-pressed="true"] { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
 .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .chip .ico { width: 18px; height: 18px; }
-.chip .bub {
-  width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center;
-  color: #fff; font: 800 8.5px/1 var(--display); font-stretch: 100%; letter-spacing: -.01em; margin-left: -6px;
+/* venue logo bubbles: the venue's white/black cut-out logo on its brand colour */
+.chip .bub, .vb {
+  border-radius: 50%; display: inline-grid; place-items: center; flex: none; overflow: hidden;
+  box-shadow: 0 0 0 1px var(--line);
+  color: #fff; font: 800 8.5px/1 var(--display); font-stretch: 100%; letter-spacing: -.01em;
 }
+.chip .bub { width: 28px; height: 28px; margin: -3px 0 -3px -9px; }
+.vb { width: 18px; height: 18px; }
+.chip .bub img, .vb img { width: 100%; height: 100%; }
 .chip .n { font-weight: 500; opacity: .6; font-variant-numeric: tabular-nums; }
 .date-jump { border: 1.5px solid var(--line); border-radius: 999px; padding: 5px 10px; background: var(--paper); font-size: 13.5px; }
 .time-from { cursor: pointer; font-weight: 600; }
@@ -157,19 +162,24 @@ main { padding-block: 8px 48px; }
 .sub-h::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
 .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+/* --vc / --vc-ink: venue colour and readable text on it, set per card */
 .ev {
   display: flex; flex-direction: column; min-width: 0; background: var(--paper);
-  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+  border: 1px solid var(--line); border-top: 4px solid var(--vc, var(--line));
+  border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
 }
 .media { position: relative; aspect-ratio: 16 / 9; max-width: 100%; background: var(--soft); overflow: hidden; display: block; }
 /* the cover sits above the venue placeholder, which only shows when there is no image or it fails to load */
-.media img, .poster img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
-.media img { transition: transform .4s ease; }
-.ev:hover .media img { transform: scale(1.03); }
+.media > img, .poster > img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
+.media > img { transition: transform .4s ease; }
+.ev:hover .media > img { transform: scale(1.03); }
 .ph {
   position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px;
-  padding: 12px 14px; color: #fff; overflow: hidden;
+  padding: 12px 14px; color: var(--vc-ink, #fff); overflow: hidden;
 }
+.ph.has-logo, .poster .ph.has-logo { align-items: center; justify-content: center; }
+.ph .ph-logo { width: 34%; max-width: 110px; aspect-ratio: 1; }
+.poster .ph .ph-logo { width: 70%; }
 .ph .ph-short { font: 900 44px/.85 var(--display); font-stretch: 125%; text-transform: uppercase; opacity: .95; letter-spacing: -.02em; }
 .ph .ph-ico { width: 28px; height: 28px; flex: none; opacity: .8; }
 .ph::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,.07) 0 2px, transparent 2px 14px); pointer-events: none; }
@@ -186,7 +196,6 @@ main { padding-block: 8px 48px; }
   display: inline-flex; align-items: center; gap: 6px; min-width: 0;
   font-size: 12.5px; font-weight: 600; color: var(--muted);
 }
-.venue i { width: 10px; height: 10px; border-radius: 50%; flex: none; }
 .venue b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ev-title { margin: 0; font: 800 19px/1.15 var(--display); letter-spacing: -.01em; text-wrap: balance; overflow-wrap: anywhere; }
 .ev-title a { text-decoration: none; }
@@ -207,8 +216,8 @@ main { padding-block: 8px 48px; }
   border: 1.5px solid var(--ink); border-radius: 999px; padding: 5px 13px;
 }
 .btn:hover { background: var(--soft); }
-.btn.primary { background: var(--ink); color: var(--paper); }
-.btn.primary:hover { opacity: .88; background: var(--ink); }
+.btn.primary { background: var(--vc, var(--ink)); color: var(--vc-ink, var(--paper)); border-color: var(--vc, var(--ink)); }
+.btn.primary:hover { opacity: .85; background: var(--vc, var(--ink)); }
 .ev.is-sold_out .media img, .ev.is-cancelled .media img { filter: grayscale(.85); opacity: .7; }
 .ev.is-cancelled .ev-title { text-decoration: line-through; text-decoration-thickness: 2px; }
 
@@ -216,7 +225,8 @@ main { padding-block: 8px 48px; }
 .films { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
 .film {
   display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; min-width: 0;
-  border: 1px solid var(--line); border-radius: var(--radius); padding: 10px; background: var(--paper);
+  border: 1px solid var(--line); border-left: 4px solid var(--vc, var(--line));
+  border-radius: var(--radius); padding: 10px; background: var(--paper);
 }
 .poster { position: relative; aspect-ratio: 2 / 3; max-width: 100%; border-radius: 3px; overflow: hidden; background: var(--soft); }
 .poster .ph { padding: 6px; flex-direction: column; align-items: flex-start; justify-content: flex-end; }
@@ -231,8 +241,8 @@ main { padding-block: 8px 48px; }
   font: 700 13.5px/1.1 var(--display); font-variant-numeric: tabular-nums;
 }
 .t small { font: 700 9.5px/1 var(--body); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-a.t:hover { background: var(--ink); color: var(--paper); }
-a.t:hover small { color: var(--paper); }
+a.t:hover { background: var(--vc, var(--ink)); border-color: var(--vc, var(--ink)); color: var(--vc-ink, var(--paper)); }
+a.t:hover small { color: inherit; }
 .t.sold_out { border-color: var(--line); color: var(--muted); text-decoration: line-through; }
 .t.past { opacity: .4; }
 
@@ -245,7 +255,6 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 .sources-h { font: 800 13px/1 var(--display); font-stretch: 125%; text-transform: uppercase; letter-spacing: .1em; margin: 0; }
 .sources { display: grid; gap: 6px 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); font-size: 13px; }
 .src { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.src i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 .src a { text-decoration: none; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .src a:hover { text-decoration: underline; }
 .src .n { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -460,7 +469,29 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
   }
 
   // ------------------------------------------------------------------ rendering pieces
+  // ------------------------------------------------------------------ venue branding
+  const luminance = (hex) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const darkMode = () => document.documentElement.dataset.theme === "dark" ||
+    (document.documentElement.dataset.theme !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+  // CSS vars for a card: the venue colour (lifted to light grey when a black brand would vanish on a dark page)
+  // and the text colour that reads on it
+  function venueVars(v) {
+    const c = /^#[0-9a-f]{6}$/i.test(v.color || "") ? v.color : "#5c5f68";
+    const accent = darkMode() && luminance(c) < 0.12 ? "#e8e9ed" : c;
+    return `--vc:${accent};--vc-ink:${luminance(accent) > 0.5 ? "#121317" : "#ffffff"}`;
+  }
+  function venueBubble(v, cls = "vb") {
+    const inner = v.logo ? `<img src="${esc(v.logo)}" alt="">` : cls === "bub" ? esc((v.short || "").slice(0, 4)) : "";
+    return `<span class="${cls}" style="background:${esc(v.color)}" aria-hidden="true">${inner}</span>`;
+  }
+
   function placeholder(v, cls = "") {
+    if (v.logo) {
+      return `<div class="ph has-logo ${cls}" style="background:${esc(v.color)}"><img class="ph-logo" src="${esc(v.logo)}" alt=""></div>`;
+    }
     const short = v.short || v.name.slice(0, 3);
     return `<div class="ph ${cls}" style="background:${esc(v.color)}"><span class="ph-short">${esc(short)}</span>${icon(v.category, "ico ph-ico")}</div>`;
   }
@@ -488,12 +519,12 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     const info = e.url ? `<a class="btn" href="${esc(e.url)}" target="_blank" rel="noopener">${t().info}</a>` : "";
     const tix = e.ticket_url && e.status !== "cancelled" && e.status !== "sold_out"
       ? `<a class="btn primary" href="${esc(e.ticket_url)}" target="_blank" rel="noopener">${t().tickets} →</a>` : "";
-    return `<article class="ev is-${esc(e.status)}">
+    return `<article class="ev is-${esc(e.status)}" style="${venueVars(v)}">
       <a class="media" href="${esc(e.url || v.home)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
         ${imageOr(e, v)}<span class="cat-badge">${icon(v.category)}${esc(t().cat[v.category])}</span></a>
       <div class="ev-body">
         <div class="ev-top"><span class="time">${e.time_tbd ? "–" : hhmm(e.start)}</span>
-          <span class="venue"><i style="background:${esc(v.color)}"></i><b>${esc(v.name)}</b></span></div>
+          <span class="venue">${venueBubble(v)}<b>${esc(v.name)}</b></span></div>
         <h3 class="ev-title"><a href="${esc(e.url || v.home)}" target="_blank" rel="noopener">${esc(e.title)}</a></h3>
         ${e.subtitle ? `<p class="ev-sub">${esc(e.subtitle)}</p>` : e.description ? `<p class="ev-sub">${esc(e.description)}</p>` : ""}
         ${meta ? `<p class="meta">${meta}</p>` : ""}
@@ -519,11 +550,11 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     }).join("");
     const img = group.find((e) => e.image)?.image;
     const dur = group.find((e) => e.duration_min)?.duration_min;
-    return `<article class="film">
+    return `<article class="film" style="${venueVars(v)}">
       <a class="poster" href="${esc(first.url || v.home)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
         ${placeholder(v)}${img ? `<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ""}</a>
       <div class="film-body">
-        <span class="venue"><i style="background:${esc(v.color)}"></i><b>${esc(v.name)}</b></span>
+        <span class="venue">${venueBubble(v)}<b>${esc(v.name)}</b></span>
         <h3 class="ev-title"><a href="${esc(first.url || v.home)}" target="_blank" rel="noopener">${esc(first.title)}</a></h3>
         ${dur ? `<p class="meta"><span>${esc(durationText(dur))}</span></p>` : ""}
         <div class="times">${times}</div>
@@ -634,7 +665,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     $("#cats").innerHTML = cats.map((c) => `<button class="chip" type="button" data-cat="${c}" aria-pressed="${state.cats.has(c)}">
       ${icon(c)}${esc(t().cat[c])}</button>`).join("");
     $("#venues").innerHTML = V.map((v) => `<button class="chip" type="button" data-venue="${esc(v.id)}" aria-pressed="${state.venues.has(v.id)}">
-      <span class="bub" style="background:${esc(v.color)}">${esc((v.short || "").slice(0, 4))}</span>${esc(v.name)}
+      ${venueBubble(v, "bub")}${esc(v.name)}
       <span class="n">${counts[v.id] || 0}</span></button>`).join("");
   }
 
@@ -683,7 +714,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       let label = n ? t().ok(n) : t().none;
       if (s && s.ok === false && s.kept_previous) label = t().kept(n);
       const bad = !n || (s && s.ok === false);
-      return `<div class="src"><i style="background:${esc(v.color)}"></i><a href="${esc(v.home)}" target="_blank" rel="noopener">${esc(v.name)}</a>
+      return `<div class="src">${venueBubble(v)}<a href="${esc(v.home)}" target="_blank" rel="noopener">${esc(v.name)}</a>
         <span class="n ${bad ? "bad" : ""}">${esc(label)}</span></div>`;
     }).join("");
     const dates = state.data.events.map((e) => e.start.slice(0, 10)).filter((k) => k >= today).sort();
