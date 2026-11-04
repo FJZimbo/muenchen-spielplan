@@ -79,6 +79,15 @@ button, input, select { font: inherit; color: inherit; }
 .lang { display: inline-flex; border: 1.5px solid var(--ink); border-radius: 999px; overflow: hidden; }
 .lang button { background: none; border: 0; padding: 4px 11px; font-weight: 700; font-size: 12.5px; letter-spacing: .06em; cursor: pointer; }
 .lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.tabs { border-bottom: 1px solid var(--line); }
+.tabs .wrap { display: flex; gap: 4px; }
+.tabs a {
+  padding: 10px 14px; text-decoration: none; color: var(--muted);
+  font: 800 14px/1 var(--display); font-stretch: 112%; text-transform: uppercase; letter-spacing: .04em;
+}
+.tabs a:first-child { margin-left: -14px; }
+.tabs a:hover { color: var(--ink); }
+.tabs a[aria-current="page"] { color: var(--ink); box-shadow: inset 0 -3px var(--gold); }
 .preview-note { background: var(--gold); color: var(--on-gold); font-size: 13px; }
 .preview-note .wrap { padding-block: 8px; }
 
@@ -106,14 +115,15 @@ button, input, select { font: inherit; color: inherit; }
 .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .chip .ico { width: 18px; height: 18px; }
 /* venue logo bubbles: the venue's white/black cut-out logo on its brand colour */
-.chip .bub, .vb {
+.chip .bub, .vb, .bub.big {
   border-radius: 50%; display: inline-grid; place-items: center; flex: none; overflow: hidden;
   box-shadow: 0 0 0 1px var(--line);
   color: #fff; font: 800 8.5px/1 var(--display); font-stretch: 100%; letter-spacing: -.01em;
 }
 .chip .bub { width: 28px; height: 28px; margin: -3px 0 -3px -9px; }
 .vb { width: 18px; height: 18px; }
-.chip .bub img, .vb img { width: 100%; height: 100%; }
+.chip .bub img, .vb img, .bub.big img { width: 100%; height: 100%; }
+.bub.big { width: 52px; height: 52px; font-size: 13px; }
 .chip .n { font-weight: 500; opacity: .6; font-variant-numeric: tabular-nums; }
 .date-jump { border: 1.5px solid var(--line); border-radius: 999px; padding: 5px 10px; background: var(--paper); font-size: 13.5px; }
 .time-from { cursor: pointer; font-weight: 600; }
@@ -150,7 +160,7 @@ main { padding-block: 8px 48px; }
   font: 900 clamp(34px, 6.5vw, 72px)/.92 var(--display); font-stretch: 125%;
   letter-spacing: -.03em; text-transform: uppercase; text-wrap: balance;
 }
-.month small { font: 500 .3em/1 var(--body); letter-spacing: .04em; color: var(--muted); margin-left: .4em; vertical-align: .9em; }
+.month small { font: 500 .3em/1 var(--body); letter-spacing: .04em; color: var(--muted); margin-left: .4em; vertical-align: .9em; white-space: nowrap; }
 .day { display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 20px; padding-block: 22px; border-bottom: 1px solid var(--line); }
 .day-head { position: sticky; top: var(--bar-h, 150px); align-self: start; display: grid; gap: 2px; }
 .day-num { font: 900 56px/.85 var(--display); font-stretch: 112%; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
@@ -249,6 +259,75 @@ a.t:hover small { color: inherit; }
 .more-sentinel { height: 1px; }
 .empty { padding: 32px 0; color: var(--muted); }
 
+/* ---------- today */
+.today-chips { margin-top: 18px; }
+.today-done { margin: 14px 0 0; color: var(--muted); font-size: 15px; }
+.slideshow { position: relative; margin-top: 16px; }
+.slides { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-radius: var(--radius); background: #121317; }
+.slides::-webkit-scrollbar { display: none; }
+.slide {
+  position: relative; flex: 0 0 100%; min-width: 0; scroll-snap-align: start; overflow: hidden;
+  aspect-ratio: 16 / 9; min-height: 420px; max-height: min(68vh, 640px);
+  border-top: 4px solid var(--vc); color: #fff;
+}
+/* many covers are small or portrait: show them whole over a blurred copy instead of cropping and enlarging */
+.slide-bg { position: absolute; inset: -24px; width: calc(100% + 48px); max-width: none; height: calc(100% + 48px); object-fit: cover; filter: blur(20px) brightness(.55); }
+.slide-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.slide::after { content: ""; position: absolute; inset: 35% 0 0; background: linear-gradient(transparent, rgba(0, 0, 0, .86)); pointer-events: none; }
+.slide-link { position: absolute; inset: 0; z-index: 2; }
+.slide-text { position: absolute; z-index: 3; left: 0; right: 0; bottom: 0; display: grid; gap: 6px; padding: 20px clamp(16px, 5vw, 72px); pointer-events: none; }
+.slide-text a { pointer-events: auto; }
+.slide-time { font: 800 22px/1.1 var(--display); font-variant-numeric: tabular-nums; }
+.slide-title { margin: 0; font: 900 clamp(26px, 4.4vw, 48px)/1.02 var(--display); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; }
+.slide-sub { margin: 0; font-size: 14px; opacity: .88; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.slide-foot { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13.5px; font-weight: 600; }
+.slide-foot .vb { width: 26px; height: 26px; }
+.slide-foot .btn { margin-left: auto; border-color: var(--vc); background: var(--vc); color: var(--vc-ink); }
+.slide-foot .btn:hover { background: var(--vc); opacity: .85; }
+.slide-nav {
+  position: absolute; z-index: 4; top: 50%; width: 44px; height: 44px; margin-top: -22px; border: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(18, 19, 23, .6); color: #fff; font-size: 20px; line-height: 1;
+}
+.slide-nav:hover { background: #121317; }
+.slide-nav.prev { left: 12px; }
+.slide-nav.next { right: 12px; }
+.slide-count { margin: 8px 0 0; text-align: right; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* ---------- venues */
+.vgroup { display: grid; gap: 18px; margin-top: 28px; }
+.vcards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+/* tinted with the same venue colour as its filter chip */
+.vcard {
+  display: flex; flex-direction: column; min-width: 0; text-decoration: none; overflow: hidden;
+  background: color-mix(in srgb, var(--vc) 7%, var(--paper));
+  border: 1px solid color-mix(in srgb, var(--vc) 30%, var(--line)); border-top: 4px solid var(--vc);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.vcard:hover { border-color: var(--vc); }
+.vcard:hover .media > img { transform: scale(1.03); }
+.vcard .media, .vphoto .media { aspect-ratio: 3 / 2; }
+.vcard .bub.big { position: absolute; z-index: 2; left: 10px; bottom: 10px; box-shadow: 0 0 0 2px var(--paper); }
+.vcard-body { display: grid; gap: 4px; padding: 12px 14px 12px; flex: 1; align-content: start; }
+.vcard-name { font: 800 20px/1.15 var(--display); letter-spacing: -.01em; text-wrap: balance; }
+.vcard-type, .vcard-addr { font-size: 13px; color: var(--muted); }
+.vcard-n { margin-top: 4px; font-size: 13px; font-weight: 700; }
+.vcard-credit, .vphoto figcaption { font-size: 11px; color: var(--muted); }
+.back { display: inline-block; margin-top: 18px; font-size: 13.5px; font-weight: 600; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+.vhead { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 24px 32px; margin-top: 14px; padding-top: 14px; border-top: 4px solid var(--vc); }
+.vphoto { margin: 0; display: grid; gap: 6px; align-content: start; }
+.vphoto .media { border-radius: var(--radius); }
+.vphoto figcaption a:hover { color: var(--ink); }
+.vinfo { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.vtitle { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.vtitle > div { min-width: 0; }
+.vtitle h1 { margin: 0; font: 900 clamp(24px, 3.4vw, 38px)/1 var(--display); letter-spacing: -.02em; text-transform: uppercase; overflow-wrap: break-word; hyphens: auto; text-wrap: balance; }
+.vtitle p { margin: 4px 0 0; font-size: 13.5px; color: var(--muted); }
+.vintro { margin: 0; font-size: 16px; line-height: 1.5; max-width: 62ch; }
+.vaddr { display: grid; gap: 6px; }
+.vaddr a { display: inline-flex; align-items: flex-start; gap: 6px; font-weight: 600; text-underline-offset: 3px; }
+.vaddr .ico { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+
 /* ---------- footer / sources */
 footer { border-top: 2px solid var(--ink); }
 footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
@@ -265,6 +344,11 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 
 @media (max-width: 760px) {
   .day { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-block: 18px; }
+  .vhead { grid-template-columns: minmax(0, 1fr); }
+  .slide { aspect-ratio: 4 / 5; max-height: 72vh; }
+  .slide-nav { top: 28%; width: 38px; height: 38px; }
+  .slide-nav.prev { left: 8px; }
+  .slide-nav.next { right: 8px; }
   .day-head { position: static; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
   .day-num { font-size: 40px; }
   .today-badge { margin-top: 0; }
@@ -281,7 +365,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 <body>
 <header class="masthead">
   <div class="wrap">
-    <a class="brand" href="#top" id="top">
+    <a class="brand" href="#">
       <span class="brand-name">München <span>Spielplan</span></span>
       <span class="brand-sub" id="brand-sub">Theater · Oper · Konzert · Kino in München</span>
     </a>
@@ -295,6 +379,14 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
   </div>
 </header>
 
+<nav class="tabs" aria-label="Seiten / Pages">
+  <div class="wrap">
+    <a href="#" data-view="spielplan">Spielplan</a>
+    <a href="#today" data-view="today">Heute</a>
+    <a href="#venues" data-view="venues">Spielstätten</a>
+  </div>
+</nav>
+
 <div class="bar">
   <div class="wrap">
     <div class="row">
@@ -302,7 +394,6 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
         <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         <input id="q" type="search" autocomplete="off">
       </label>
-      <button class="toggle" id="today" type="button" aria-pressed="false">Heute</button>
       <button class="toggle" id="available" type="button" aria-pressed="false">Nur mit Karten</button>
       <input class="date-jump" id="date" type="date">
       <select class="date-jump time-from" id="from"></select>
@@ -317,6 +408,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 </div>
 
 <main class="wrap">
+  <div id="page"></div>
   <p class="status-msg" id="status-msg" role="status"></p>
   <div id="programme"></div>
 </main>
@@ -342,6 +434,10 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     de: {
       locale: "de-DE",
       sub: "Theater · Oper · Konzert · Kino in München",
+      tabs: { spielplan: "Spielplan", today: "Heute", venues: "Spielstätten" },
+      todayDone: "Heute gibt es keine Termine mehr. Das läuft als Nächstes:",
+      slideshow: "Termine als Diashow", prevSlide: "Vorheriger Termin", nextSlide: "Nächster Termin",
+      allVenues: "Alle Spielstätten", address: "Adresse", website: "Website", photo: "Foto", openMaps: "In Google Maps öffnen",
       search: "Titel, Haus, Bühne suchen",
       today: "Heute", available: "Nur mit Karten", filters: "Filter", clear: "Zurücksetzen",
       jump: "Zu Datum springen",
@@ -364,6 +460,10 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     en: {
       locale: "en-GB",
       sub: "Theatre · Opera · Concerts · Cinema in Munich",
+      tabs: { spielplan: "Programme", today: "Today", venues: "Venues" },
+      todayDone: "Nothing more on today. Coming up next:",
+      slideshow: "Events slideshow", prevSlide: "Previous event", nextSlide: "Next event",
+      allVenues: "All venues", address: "Address", website: "Website", photo: "Photo", openMaps: "Open in Google Maps",
       search: "Search title, venue, stage",
       today: "Today", available: "Tickets available", filters: "Filters", clear: "Reset",
       jump: "Jump to date",
@@ -403,6 +503,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     concert: '<path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/>',
     cinema: '<rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M7 5v14M17 5v14M3 9h4M3 15h4M17 9h4M17 15h4"/>',
     search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    pin: '<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
   };
   const icon = (k, cls = "ico") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k] || ""}</svg>`;
 
@@ -416,7 +517,8 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     q: "",
     venues: new Set(store.get("venues", [])),
     cats: new Set(store.get("cats", [])),
-    todayOnly: false,
+    route: { view: "spielplan" },   // spielplan | today | venues | venue (with id)
+    todayCat: null,  // category picked on the Today page
     availableOnly: store.get("available", false),
     fromHour: store.get("from", null),   // only events starting at or after this hour
     data: null,
@@ -439,6 +541,12 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 
   // ------------------------------------------------------------------ data
   const venueMap = () => Object.fromEntries(state.data.venues.map((v) => [v.id, v]));
+  function upcomingCounts() {
+    const today = todayKey();
+    const counts = {};
+    for (const e of state.data.events) if (e.start.slice(0, 10) >= today) counts[e.venue_id] = (counts[e.venue_id] || 0) + 1;
+    return counts;
+  }
 
   function matches(e, V) {
     const v = V[e.venue_id];
@@ -454,15 +562,24 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     return true;
   }
 
+  // today, or the next day with something on once today's last show has started
+  function showcaseDay() {
+    const now = new Date(), today = todayKey();
+    const next = state.data.events.find((e) => e.start.slice(0, 10) >= today && e.status !== "cancelled" && (e.time_tbd || new Date(e.start) >= now));
+    return next ? next.start.slice(0, 10) : today;
+  }
+
   function buildDays() {
     const V = venueMap();
     const today = todayKey();
+    const { view, id } = state.route;
+    const showcase = view === "today" ? showcaseDay() : null;
     const byDay = new Map();
-    for (const e of state.data.events) {
+    for (const e of view === "venues" ? [] : state.data.events) {
       const k = e.start.slice(0, 10);
-      if (k < today) continue;
-      if (state.todayOnly && k !== today) continue;
-      if (!matches(e, V)) continue;
+      if (k < today || !V[e.venue_id]) continue;
+      if (view === "today" && (k !== showcase || (state.todayCat && V[e.venue_id].category !== state.todayCat))) continue;
+      if (view === "venue" ? e.venue_id !== id : view === "spielplan" && !matches(e, V)) continue;
       if (!byDay.has(k)) byDay.set(k, []);
       byDay.get(k).push(e);
     }
@@ -485,7 +602,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     return `--vc:${accent};--vc-ink:${luminance(accent) > 0.5 ? "#121317" : "#ffffff"}`;
   }
   function venueBubble(v, cls = "vb") {
-    const inner = v.logo ? `<img src="${esc(v.logo)}" alt="">` : cls === "bub" ? esc((v.short || "").slice(0, 4)) : "";
+    const inner = v.logo ? `<img src="${esc(v.logo)}" alt="">` : cls.startsWith("bub") ? esc((v.short || "").slice(0, 4)) : "";
     return `<span class="${cls}" style="background:${esc(v.color)}" aria-hidden="true">${inner}</span>`;
   }
 
@@ -615,6 +732,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     const msg = $("#status-msg");
     state.rendered = 0;
     box.innerHTML = "";
+    if (state.route.view === "venues") { msg.hidden = true; return; }
     if (!state.data.events.length) { msg.textContent = t().noData; msg.hidden = false; return; }
     if (!state.days.length) { msg.textContent = t().noMatch; msg.hidden = false; return; }
     msg.hidden = true;
@@ -653,6 +771,141 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - barH - 6, behavior: "smooth" });
   }
 
+  // ------------------------------------------------------------------ today
+  let slideTimer;
+  // one slide per stage event, then one per film with all its remaining screenings
+  function todaySlides() {
+    const V = venueMap(), now = new Date();
+    const stage = [], films = new Map();
+    for (const e of state.days[0]?.items || []) {
+      if (e.status === "cancelled" || (!e.time_tbd && new Date(e.start) < now)) continue;
+      const v = V[e.venue_id];
+      if (v.category !== "cinema") { stage.push({ v, items: [e] }); continue; }
+      const k = `${e.venue_id}|${e.title.toLowerCase()}`;
+      if (!films.has(k)) films.set(k, { v, items: [] });
+      films.get(k).items.push(e);
+    }
+    return [...stage, ...films.values()];
+  }
+
+  function slideHTML({ v, items }) {
+    const e = items[0];
+    const img = items.find((x) => x.image)?.image;
+    const pic = img ? `<img class="slide-bg" src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">
+      <img class="slide-img" src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : "";
+    const time = e.time_tbd ? "–" : items.map((x) => hhmm(x.start)).join(" · ");
+    const sub = e.subtitle || e.description;
+    const place = [v.name, v.category === "cinema" ? "" : e.stage].filter(Boolean).join(" · ");
+    const href = items.find((x) => x.ticket_url && x.status !== "sold_out")?.ticket_url;
+    return `<article class="slide" style="${venueVars(v)}">
+      ${placeholder(v)}${pic}
+      <a class="slide-link" href="${esc(e.url || v.home)}" target="_blank" rel="noopener" aria-label="${esc(e.title)}"></a>
+      <div class="slide-text">
+        <span class="slide-time">${esc(time)}</span>
+        <h3 class="slide-title">${esc(e.title)}</h3>
+        ${sub ? `<p class="slide-sub">${esc(sub)}</p>` : ""}
+        <div class="slide-foot">${venueBubble(v)}<span>${esc(place)}</span>${stateBadge(e.status)}
+          ${href ? `<a class="btn" href="${esc(href)}" target="_blank" rel="noopener">${t().tickets} →</a>` : ""}</div>
+      </div></article>`;
+  }
+
+  function todayHTML() {
+    const V = venueMap();
+    const key = showcaseDay();
+    const d = keyToDate(key);
+    const cats = CATS.filter((c) => state.data.events.some((e) => e.start.slice(0, 10) === key && V[e.venue_id]?.category === c));
+    const chips = cats.map((c) => `<button class="chip" type="button" data-today-cat="${c}" aria-pressed="${state.todayCat === c}">${icon(c)}${esc(t().cat[c])}</button>`).join("");
+    const slides = todaySlides();
+    const show = slides.length ? `<section class="slideshow" aria-roledescription="carousel" aria-label="${esc(t().slideshow)}">
+        <div class="slides" id="slides">${slides.map(slideHTML).join("")}</div>
+        ${slides.length > 1 ? `<button class="slide-nav prev" type="button" data-step="-1" aria-label="${esc(t().prevSlide)}">←</button>
+        <button class="slide-nav next" type="button" data-step="1" aria-label="${esc(t().nextSlide)}">→</button>` : ""}
+        <p class="slide-count" id="slide-count"></p></section>` : "";
+    return `<h2 class="month">${esc(key === todayKey() ? t().today : fmt({ weekday: "long" }).format(d))}<small>${esc(fmt({ day: "numeric", month: "long" }).format(d))}</small></h2>
+      ${key === todayKey() ? "" : `<p class="today-done">${esc(t().todayDone)}</p>`}
+      <div class="chips today-chips">${chips}</div>${show}`;
+  }
+
+  function startSlideshow() {
+    const track = $("#slides");
+    if (!track) return;
+    const box = track.parentElement, count = $("#slide-count"), total = track.children.length;
+    const current = () => Math.round(track.scrollLeft / track.clientWidth);
+    const show = () => { count.textContent = `${current() + 1} / ${total}`; };
+    const go = (i) => track.scrollTo({ left: ((i + total) % total) * track.clientWidth, behavior: "smooth" });
+    let paused = false;
+    box.addEventListener("pointerenter", () => { paused = true; });
+    box.addEventListener("pointerleave", () => { paused = false; });
+    box.addEventListener("focusin", () => { paused = true; });
+    box.addEventListener("focusout", () => { paused = false; });
+    box.addEventListener("click", (ev) => { const b = ev.target.closest("[data-step]"); if (b) go(current() + Number(b.dataset.step)); });
+    track.addEventListener("scroll", show, { passive: true });
+    show();
+    if (total > 1 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      slideTimer = setInterval(() => { if (!paused && !document.hidden) go(current() + 1); }, 6000);
+    }
+  }
+
+  // ------------------------------------------------------------------ venues
+  const CATS = ["theatre", "opera", "concert", "cinema"];
+  const localized = (o) => o?.[state.lang] || o?.de || "";
+  const mapsUrl = (address) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+  function venuePhoto(v) {
+    const ph = placeholder(v);
+    if (!v.photo) return ph;
+    return `${ph}<img src="${esc(v.photo.file)}" alt="${esc(v.name)}" loading="lazy" decoding="async" onerror="this.remove()">`;
+  }
+
+  function venueCard(v, n) {
+    const credit = v.photo ? `<span class="vcard-credit">${t().photo}: ${esc(v.photo.credit)}, ${esc(v.photo.license)}</span>` : "";
+    return `<a class="vcard" href="#venues/${esc(v.id)}" style="${venueVars(v)}">
+      <span class="media">${venuePhoto(v)}${v.photo ? venueBubble(v, "bub big") : ""}</span>
+      <span class="vcard-body"><span class="vcard-name">${esc(v.name)}</span>
+        <span class="vcard-type">${esc(localized(v.type))}</span>
+        <span class="vcard-addr">${esc(v.address?.[0] || "")}</span>
+        <span class="vcard-n">${t().events(n)}</span>${credit}</span></a>`;
+  }
+
+  function venuesHTML() {
+    const counts = upcomingCounts();
+    const groups = CATS.map((c) => {
+      const list = state.data.venues.filter((v) => v.category === c);
+      return list.length ? `<section class="vgroup"><h3 class="sub-h">${esc(t().cat[c])}</h3>
+        <div class="vcards">${list.map((v) => venueCard(v, counts[v.id] || 0)).join("")}</div></section>` : "";
+    }).join("");
+    return `<h2 class="month">${esc(t().tabs.venues)}</h2>${groups}`;
+  }
+
+  function venueHTML(v) {
+    const addresses = (v.address || []).map((a) => `<a href="${esc(mapsUrl(a))}" target="_blank" rel="noopener" title="${esc(t().openMaps)}">${icon("pin")}<span>${esc(a)}</span></a>`).join("");
+    const caption = v.photo ? `<figcaption>${t().photo}: <a href="${esc(v.photo.source)}" target="_blank" rel="noopener">${esc(v.photo.credit)}</a>, ${esc(v.photo.license)}</figcaption>` : "";
+    return `<a class="back" href="#venues">← ${esc(t().allVenues)}</a>
+      <section class="vhead" style="${venueVars(v)}">
+        <figure class="vphoto"><div class="media">${venuePhoto(v)}</div>${caption}</figure>
+        <div class="vinfo">
+          <div class="vtitle">${venueBubble(v, "bub big")}<div><h1>${esc(v.name)}</h1><p>${esc(localized(v.type))}</p></div></div>
+          <p class="vintro">${esc(localized(v.intro))}</p>
+          ${addresses ? `<div class="vaddr"><h2 class="sources-h">${esc(t().address)}</h2>${addresses}</div>` : ""}
+          <div class="actions"><a class="btn primary" href="${esc(v.home)}" target="_blank" rel="noopener">${esc(t().website)} →</a></div>
+        </div>
+      </section>
+      <h2 class="month">${esc(t().tabs.spielplan)}</h2>`;
+  }
+
+  function renderPage() {
+    const { view, id } = state.route;
+    $(".bar").hidden = view !== "spielplan";
+    const venue = view === "venue" ? venueMap()[id] : null;
+    clearInterval(slideTimer);
+    $("#page").innerHTML = view === "today" ? todayHTML() : view === "venues" ? venuesHTML() : venue ? venueHTML(venue) : "";
+    if (view === "today") startSlideshow();
+    const tab = view === "venue" ? "venues" : view;
+    document.querySelectorAll(".tabs a").forEach((a) => {
+      a.textContent = t().tabs[a.dataset.view];
+      if (a.dataset.view === tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+  }
+
   // ------------------------------------------------------------------ chrome (filters, strip, footer)
   function renderStrip() {
     const strip = $("#strip");
@@ -670,10 +923,8 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 
   function renderChips() {
     const V = state.data.venues;
-    const today = todayKey();
-    const counts = {};
-    for (const e of state.data.events) if (e.start.slice(0, 10) >= today) counts[e.venue_id] = (counts[e.venue_id] || 0) + 1;
-    const cats = ["theatre", "opera", "concert", "cinema"].filter((c) => V.some((v) => v.category === c));
+    const counts = upcomingCounts();
+    const cats = CATS.filter((c) => V.some((v) => v.category === c));
     $("#cats").innerHTML = cats.map((c) => `<button class="chip" type="button" data-cat="${c}" aria-pressed="${state.cats.has(c)}">
       ${icon(c)}${esc(t().cat[c])}</button>`).join("");
     $("#venues").innerHTML = V.map((v) => `<button class="chip" type="button" data-venue="${esc(v.id)}" aria-pressed="${state.venues.has(v.id)}">
@@ -686,8 +937,6 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     $("#brand-sub").textContent = t().sub;
     $("#q").placeholder = t().search;
     $("#q").setAttribute("aria-label", t().search);
-    $("#today").textContent = t().today;
-    $("#today").setAttribute("aria-pressed", state.todayOnly);
     $("#available").textContent = t().available;
     $("#available").setAttribute("aria-pressed", state.availableOnly);
     const from = $("#from");
@@ -717,8 +966,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
 
     // sources
     const today = todayKey();
-    const counts = {};
-    for (const e of state.data.events) if (e.start.slice(0, 10) >= today) counts[e.venue_id] = (counts[e.venue_id] || 0) + 1;
+    const counts = upcomingCounts();
     const st = state.status?.venues || {};
     $("#sources").innerHTML = state.data.venues.map((v) => {
       const s = st[v.id];
@@ -739,6 +987,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     renderChips();
     renderChrome();
     renderStrip();
+    renderPage();
     renderProgramme();
     if (!keepScroll) window.scrollTo({ top: 0 });
     setBarHeight();
@@ -774,7 +1023,6 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       clearTimeout(qTimer);
       qTimer = setTimeout(() => { state.q = ev.target.value.trim().toLowerCase(); refresh({ keepScroll: true }); }, 180);
     });
-    $("#today").addEventListener("click", () => { state.todayOnly = !state.todayOnly; refresh(); });
     $("#available").addEventListener("click", () => { state.availableOnly = !state.availableOnly; store.set("available", state.availableOnly); refresh({ keepScroll: true }); });
     $("#from").addEventListener("change", (ev) => {
       state.fromHour = ev.target.value === "" ? null : Number(ev.target.value);
@@ -791,7 +1039,7 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       store.set("venues", [...state.venues]); refresh();
     });
     $("#clear").addEventListener("click", () => {
-      state.venues.clear(); state.cats.clear(); state.q = ""; state.todayOnly = false; state.availableOnly = false; state.fromHour = null;
+      state.venues.clear(); state.cats.clear(); state.q = ""; state.availableOnly = false; state.fromHour = null;
       $("#q").value = ""; store.set("venues", []); store.set("cats", []); store.set("available", false); store.set("from", null); refresh();
     });
     $("#filter-toggle").addEventListener("click", (ev) => {
@@ -809,6 +1057,29 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
       requestAnimationFrame(() => { syncStripToScroll(); ticking = false; });
     }, { passive: true });
     window.addEventListener("resize", setBarHeight);
+    window.addEventListener("hashchange", navigate);
+    $("#page").addEventListener("click", (ev) => {
+      const b = ev.target.closest("[data-today-cat]"); if (!b) return;
+      state.todayCat = state.todayCat === b.dataset.todayCat ? null : b.dataset.todayCat;
+      refresh({ keepScroll: true });
+    });
+  }
+
+  // ------------------------------------------------------------------ routing
+  function parseRoute() {
+    const h = location.hash.slice(1);
+    if (h === "today" || h === "heute") return { view: "today" };
+    if (h === "venues") return { view: "venues" };
+    const m = h.match(/^venues\/(.+)$/);
+    if (m && state.data.venues.some((v) => v.id === m[1])) return { view: "venue", id: m[1] };
+    return { view: "spielplan" };
+  }
+
+  function navigate() {
+    state.route = parseRoute();
+    refresh();
+    const m = location.hash.match(/^#day-(\d{4}-\d{2}-\d{2})$/);
+    if (m) setTimeout(() => jumpTo(m[1]), 50);
   }
 
   // ------------------------------------------------------------------ boot
@@ -839,11 +1110,8 @@ footer .wrap { padding-block: 24px 40px; display: grid; gap: 14px; }
     // forget saved filters for venues that no longer exist
     const ids = new Set(state.data.venues.map((v) => v.id));
     state.venues = new Set([...state.venues].filter((v) => ids.has(v)));
-    if (location.hash === "#heute" || location.hash === "#today") state.todayOnly = true;
     bind();
-    refresh();
-    const m = location.hash.match(/^#day-(\d{4}-\d{2}-\d{2})$/);
-    if (m) setTimeout(() => jumpTo(m[1]), 50);
+    navigate();
   }
 
   init();

@@ -6,7 +6,24 @@
     "category": "theatre",
     "color": "#d60027",
     "home": "https://www.residenztheater.de/spielplan",
-    "logo": "logos/residenztheater.png"
+    "logo": "logos/residenztheater.png",
+    "type": {
+      "de": "Staatstheater · Schauspiel",
+      "en": "State theatre · Drama"
+    },
+    "address": [
+      "Max-Joseph-Platz 1, 80539 München"
+    ],
+    "intro": {
+      "de": "Das „Resi“ ist die Hauptbühne des Bayerischen Staatsschauspiels und eines der großen Sprechtheater im deutschsprachigen Raum. Der Name erinnert an das Rokokotheater von François de Cuvilliés aus dem Jahr 1753, in dem 1781 Mozarts „Idomeneo“ uraufgeführt wurde. Der heutige Bau entstand 1949–1951 nach der Zerstörung im Zweiten Weltkrieg.",
+      "en": "The “Resi” is the main stage of the Bavarian State Drama company and one of the leading playhouses in the German-speaking world. Its name recalls François de Cuvilliés's rococo theatre of 1753, where Mozart's “Idomeneo” premiered in 1781. The present building went up in 1949–1951 after wartime destruction."
+    },
+    "photo": {
+      "file": "venues/residenztheater.jpg",
+      "credit": "Burkhard Mücke",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2019-01-26_Residenztheater_M%C3%BCnchen.jpg"
+    }
   },
   {
     "id": "kammerspiele",
@@ -15,7 +32,24 @@
     "category": "theatre",
     "color": "#000000",
     "home": "https://www.muenchner-kammerspiele.de/de/programm",
-    "logo": "logos/kammerspiele.png"
+    "logo": "logos/kammerspiele.png",
+    "type": {
+      "de": "Städtisches Theater · Schauspiel",
+      "en": "Municipal theatre · Drama"
+    },
+    "address": [
+      "Maximilianstraße 26–28, 80539 München"
+    ],
+    "intro": {
+      "de": "Die Kammerspiele wurden 1912 in der Augustenstraße gegründet und zogen 1926 unter Otto Falckenberg in das Schauspielhaus an der Maximilianstraße. Der 1901 eröffnete Jugendstilbau von Max Littmann und Richard Riemerschmid ist bis heute das Herz des Hauses, ergänzt durch den Werkraum und die Therese-Giehse-Halle.",
+      "en": "The Kammerspiele were founded in 1912 on Augustenstraße and moved to the playhouse on Maximilianstraße in 1926 under Otto Falckenberg. The Art Nouveau building of 1901 by Max Littmann and Richard Riemerschmid is still the heart of the theatre, joined by the Werkraum and the Therese-Giehse-Halle."
+    },
+    "photo": {
+      "file": "venues/kammerspiele.jpg",
+      "credit": "Christian Wolf",
+      "license": "CC BY-SA 3.0 de",
+      "source": "https://commons.wikimedia.org/wiki/File:M%C3%BCnchner_Kammerspiele.jpg"
+    }
   },
   {
     "id": "volkstheater",
@@ -24,7 +58,24 @@
     "category": "theatre",
     "color": "#ff8c00",
     "home": "https://www.muenchner-volkstheater.de/programm/spielplan",
-    "logo": "logos/volkstheater.png"
+    "logo": "logos/volkstheater.png",
+    "type": {
+      "de": "Städtisches Theater · Schauspiel",
+      "en": "Municipal theatre · Drama"
+    },
+    "address": [
+      "Tumblingerstraße 29, 80337 München"
+    ],
+    "intro": {
+      "de": "Ein erstes Volkstheater gab es in München schon 1903; das heutige wurde 1983 neu gegründet und spielte zunächst in der Brienner Straße. Seit Oktober 2021 steht es im Backstein-Neubau im Schlachthofviertel mit drei Bühnen. Das Haus ist bekannt für junge Regie und ein junges Publikum.",
+      "en": "Munich had a first Volkstheater as early as 1903; today's company was refounded in 1983 and began on Brienner Straße. Since October 2021 it has had a new brick building with three stages in the Schlachthof district. The theatre is known for young directors and a young audience."
+    },
+    "photo": {
+      "file": "venues/volkstheater.jpg",
+      "credit": "HubertSt",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Volkstheater-Muenchen-Tumblingerstrasse-Turm-002.jpg"
+    }
   },
   {
     "id": "deutsches-theater",
@@ -33,7 +84,24 @@
     "category": "theatre",
     "color": "#7a1230",
     "home": "https://www.deutsches-theater.de/programm/",
-    "logo": "logos/deutsches-theater.png"
+    "logo": "logos/deutsches-theater.png",
+    "type": {
+      "de": "Gastspieltheater · Musical & Show",
+      "en": "Touring house · Musicals & shows"
+    },
+    "address": [
+      "Schwanthalerstraße 13, 80336 München"
+    ],
+    "intro": {
+      "de": "Das 1896 eröffnete Deutsche Theater ist mit rund 1500 Plätzen eines der größten Theater der Stadt und ein großes Gastspielhaus mit Vollbühne. Auf dem Programm stehen Musicals, Tanz, Shows und Operetten. Im Fasching wird es zum Ballhaus.",
+      "en": "Opened in 1896, the Deutsches Theater seats about 1,500, making it one of the city's largest theatres and a major touring house with a full stage. The programme covers musicals, dance, shows and operetta. During carnival season it turns into a ballroom."
+    },
+    "photo": {
+      "file": "venues/deutsches-theater.jpg",
+      "credit": "Fentriss",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Mueschwanthalerstr1518062017c90_(Deutsches_Theater).jpg"
+    }
   },
   {
     "id": "metropoltheater",
@@ -42,7 +110,24 @@
     "category": "theatre",
     "color": "#1d2b4f",
     "home": "https://www.metropoltheater.com/spielplan/aktuell/",
-    "logo": "logos/metropoltheater.png"
+    "logo": "logos/metropoltheater.png",
+    "type": {
+      "de": "Freies Theater",
+      "en": "Independent theatre"
+    },
+    "address": [
+      "Floriansmühlstraße 5, 80939 München"
+    ],
+    "intro": {
+      "de": "Das Metropoltheater in Freimann spielt seit 1998 im alten Kino des Stadtteils, dessen 50er-Jahre-Ästhetik erhalten blieb. Gegründet hat es Intendant Jochen Schölch. Das Haus steht für bildstarke Inszenierungen und bringt gern Stücke, die in München noch nicht zu sehen waren.",
+      "en": "The Metropoltheater in Freimann has played since 1998 in the district's old cinema, keeping its 1950s look. It was founded by artistic director Jochen Schölch. The theatre is known for visually striking productions and likes to stage plays not yet seen in Munich."
+    },
+    "photo": {
+      "file": "venues/metropoltheater.jpg",
+      "credit": "Jakob Piloty",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Metropoltheater_Foyeranbau.jpg"
+    }
   },
   {
     "id": "schwere-reiter",
@@ -51,7 +136,24 @@
     "category": "theatre",
     "color": "#d4e600",
     "home": "https://schwerereiter.de/",
-    "logo": "logos/schwere-reiter.png"
+    "logo": "logos/schwere-reiter.png",
+    "type": {
+      "de": "Freie Szene · Tanz, Theater, Musik",
+      "en": "Independent scene · Dance, theatre, music"
+    },
+    "address": [
+      "Dachauer Straße 114a, 80636 München"
+    ],
+    "intro": {
+      "de": "Das schwere reiter ist seit 2008 eine Produktions- und Spielstätte für zeitgenössischen Tanz, Theater und Musik auf dem Gelände der ehemaligen Luitpold-Kaserne, heute Kreativquartier. Betrieben wird es von Tanztendenz München, Pathos München und scope. Seit 2021 arbeitet es in einem neuen Gebäude.",
+      "en": "Since 2008 schwere reiter has been a production and performance space for contemporary dance, theatre and music on the former Luitpold barracks site, now the Kreativquartier. It is run by Tanztendenz München, Pathos München and scope. It moved into a new building in 2021."
+    },
+    "photo": {
+      "file": "venues/schwere-reiter.jpg",
+      "credit": "Martina Weber",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Eingang_schwere_reiter.jpg"
+    }
   },
   {
     "id": "hochx",
@@ -60,7 +162,24 @@
     "category": "theatre",
     "color": "#00bbff",
     "home": "https://theater-hochx.de/spielplan",
-    "logo": "logos/hochx.png"
+    "logo": "logos/hochx.png",
+    "type": {
+      "de": "Freie Szene · Theater & Live Art",
+      "en": "Independent scene · Theatre & live art"
+    },
+    "address": [
+      "Entenbachstraße 37, 81541 München"
+    ],
+    "intro": {
+      "de": "Das HochX in der Au zeigt Theater, Tanz, Performance, Musik und Medienkunst vor allem aus der freien Münchner Szene. Das Haus von 1883 war früher Kolpingsaal, dann Spielort des Theaters der Jugend und bis 2015 des i-camp. 2016 wurde es neu eröffnet, 2021 erhielt es den Theaterpreis des Bundes.",
+      "en": "HochX in the Au district shows theatre, dance, performance, music and media art, mostly from Munich's independent scene. The 1883 building was once a Kolping hall, then home to the Theater der Jugend and, until 2015, the i-camp. It reopened in 2016 and won the Federal Theatre Prize in 2021."
+    },
+    "photo": {
+      "file": "venues/hochx.jpg",
+      "credit": "Dupont69",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Hoch_X.jpg"
+    }
   },
   {
     "id": "isarphilharmonie",
@@ -69,7 +188,24 @@
     "category": "concert",
     "color": "#ffdd20",
     "home": "https://www.gasteig.de/veranstaltungen/?room=isarphilharmonie",
-    "logo": "logos/isarphilharmonie.png"
+    "logo": "logos/isarphilharmonie.png",
+    "type": {
+      "de": "Konzertsaal",
+      "en": "Concert hall"
+    },
+    "address": [
+      "Hans-Preißinger-Straße 8, 81379 München"
+    ],
+    "intro": {
+      "de": "Die Isarphilharmonie wurde im Oktober 2021 auf dem Gelände Gasteig HP8 in Sendling eröffnet, als Ausweichquartier während der Gasteig-Sanierung. Der Saal mit rund 1900 Plätzen besteht aus vorgefertigten Vollholz-Elementen in einer Stahlhalle. Hier spielen die Münchner Philharmoniker, das BR-Symphonieorchester und internationale Gäste.",
+      "en": "The Isarphilharmonie opened in October 2021 on the Gasteig HP8 site in Sendling, as a temporary home during the Gasteig renovation. Its hall of about 1,900 seats is built from prefabricated solid-wood elements inside a steel structure. The Munich Philharmonic, the BR Symphony Orchestra and international guests all play here."
+    },
+    "photo": {
+      "file": "venues/isarphilharmonie.jpg",
+      "credit": "Sieghardpaw",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Isarphilharmonie_Munich_2021.jpg"
+    }
   },
   {
     "id": "muenchner-philharmoniker",
@@ -78,7 +214,24 @@
     "category": "concert",
     "color": "#78c4e9",
     "home": "https://www.mphil.de/kalender",
-    "logo": "logos/muenchner-philharmoniker.png"
+    "logo": "logos/muenchner-philharmoniker.png",
+    "type": {
+      "de": "Orchester der Stadt München",
+      "en": "Orchestra of the City of Munich"
+    },
+    "address": [
+      "Isarphilharmonie, Hans-Preißinger-Straße 8, 81379 München"
+    ],
+    "intro": {
+      "de": "Das Orchester wurde 1893 von Franz Kaim gegründet und heißt seit 1928 Münchner Philharmoniker. Gustav Mahler leitete mit ihm die Uraufführungen seiner 4. und 8. Sinfonie, die Bruckner-Tradition prägt es bis heute. Ab 1985 spielte es im Gasteig, seit 2021 in der Isarphilharmonie.",
+      "en": "The orchestra was founded in 1893 by Franz Kaim and has been called the Munich Philharmonic since 1928. Gustav Mahler conducted it in the premieres of his Fourth and Eighth Symphonies, and its Bruckner tradition continues today. It played at the Gasteig from 1985 and has been at the Isarphilharmonie since 2021."
+    },
+    "photo": {
+      "file": "venues/muenchner-philharmoniker.jpg",
+      "credit": "Burkhard Mücke",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2023-03-11_Isarphilharmonie_02.jpg"
+    }
   },
   {
     "id": "brso",
@@ -87,7 +240,25 @@
     "category": "concert",
     "color": "#0a6963",
     "home": "https://www.brso.de/konzerte-tickets/konzertkalender/",
-    "logo": "logos/brso.png"
+    "logo": "logos/brso.png",
+    "type": {
+      "de": "Rundfunkorchester",
+      "en": "Radio orchestra"
+    },
+    "address": [
+      "Herkulessaal der Residenz, Residenzstraße 1, 80333 München",
+      "Isarphilharmonie, Hans-Preißinger-Straße 8, 81379 München"
+    ],
+    "intro": {
+      "de": "Das 1949 gegründete Symphonieorchester des Bayerischen Rundfunks zählt zu den besten Orchestern der Welt. Seine Schwerpunkte sind Wiener Klassik, Romantik und Neue Musik. Es spielt vor allem im Herkulessaal der Residenz und, solange der Gasteig saniert wird, in der Isarphilharmonie.",
+      "en": "Founded in 1949, the Bavarian Radio Symphony Orchestra ranks among the world's finest. Its focus is Viennese Classicism, Romanticism and new music. It plays mainly in the Herkulessaal of the Residenz and, while the Gasteig is being renovated, in the Isarphilharmonie."
+    },
+    "photo": {
+      "file": "venues/brso.jpg",
+      "credit": "ErwinMeier",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:M%C3%BCnchen_Herkulessaal_01.jpg"
+    }
   },
   {
     "id": "muffatwerk",
@@ -96,7 +267,24 @@
     "category": "concert",
     "color": "#8a8f2a",
     "home": "https://www.muffatwerk.de/de/events",
-    "logo": "logos/muffatwerk.png"
+    "logo": "logos/muffatwerk.png",
+    "type": {
+      "de": "Kulturzentrum · Konzerte & Club",
+      "en": "Arts centre · Concerts & club"
+    },
+    "address": [
+      "Zellstraße 4, 81667 München"
+    ],
+    "intro": {
+      "de": "Das Muffatwerk in Haidhausen war zuerst Brunnhaus (1837), dann Elektrizitätswerk bis 1973. Ab 1992 wurde es zum Kulturzentrum umgebaut: Die Muffathalle öffnete 1993, der Club Ampere 2005. Gezeigt werden vor allem Konzerte, dazu Tanz, Theater und Lesungen.",
+      "en": "The Muffatwerk in Haidhausen began as a waterworks (1837) and was a power station until 1973. From 1992 it was converted into an arts centre: the Muffathalle opened in 1993 and the club Ampere in 2005. It mainly hosts concerts, along with dance, theatre and readings."
+    },
+    "photo": {
+      "file": "venues/muffatwerk.jpg",
+      "credit": "Fentriss",
+      "license": "CC0",
+      "source": "https://commons.wikimedia.org/wiki/File:Muemuffatwerk042017c85.jpg"
+    }
   },
   {
     "id": "bayerische-staatsoper",
@@ -104,7 +292,24 @@
     "short": "BSO",
     "category": "opera",
     "color": "#8a6d1d",
-    "home": "https://www.staatsoper.de/spielplan"
+    "home": "https://www.staatsoper.de/spielplan",
+    "type": {
+      "de": "Opernhaus",
+      "en": "Opera house"
+    },
+    "address": [
+      "Max-Joseph-Platz 2, 80539 München"
+    ],
+    "intro": {
+      "de": "Die Bayerische Staatsoper ging aus der Münchner Hofoper des 17. Jahrhunderts hervor. Ihr Haupthaus ist das Nationaltheater, 1818 eröffnet, nach dem Brand von 1823 wieder aufgebaut und nach der Kriegszerstörung 1963 neu eröffnet. Daneben spielt sie im Prinzregententheater und im Cuvilliés-Theater, seit 1875 gibt es die Münchner Opernfestspiele.",
+      "en": "The Bavarian State Opera grew out of Munich's 17th-century court opera. Its main house is the Nationaltheater, opened in 1818, rebuilt after a fire in 1823 and reopened in 1963 after wartime destruction. It also plays at the Prinzregententheater and the Cuvilliés-Theater, and the Munich Opera Festival dates back to 1875."
+    },
+    "photo": {
+      "file": "venues/bayerische-staatsoper.jpg",
+      "credit": "Avda",
+      "license": "CC BY-SA 3.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Bayerische_Staatsoper_-_M%C3%BCnchen_-_2013.jpg"
+    }
   },
   {
     "id": "gaertnerplatz",
@@ -113,7 +318,24 @@
     "category": "opera",
     "color": "#e53517",
     "home": "https://www.gaertnerplatztheater.de/de/spielplan/index.html",
-    "logo": "logos/gaertnerplatz.png"
+    "logo": "logos/gaertnerplatz.png",
+    "type": {
+      "de": "Staatstheater · Oper, Operette, Musical, Tanz",
+      "en": "State theatre · Opera, operetta, musicals, dance"
+    },
+    "address": [
+      "Gärtnerplatz 3, 80469 München"
+    ],
+    "intro": {
+      "de": "Das Gärtnerplatztheater wurde am 4. November 1865 als privates Volkstheater in der Isarvorstadt eröffnet. Heute ist es neben der Staatsoper das zweite Opernhaus der Stadt und eines der Bayerischen Staatstheater. Nach einer Generalsanierung öffnete es im Oktober 2017 wieder.",
+      "en": "The Gärtnerplatz theatre opened on 4 November 1865 as a privately run people's theatre in the Isarvorstadt. Today it is the city's second opera house after the State Opera and one of the Bavarian State Theatres. It reopened in October 2017 after a full renovation."
+    },
+    "photo": {
+      "file": "venues/gaertnerplatz.jpg",
+      "credit": "Burkhard Mücke",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Das_Staatstheater_am_G%C3%A4rtnerplatz_04.jpg"
+    }
   },
   {
     "id": "museum-lichtspiele",
@@ -122,7 +344,24 @@
     "category": "cinema",
     "color": "#e6007e",
     "home": "https://www.museum-lichtspiele.de/programm?filter=all",
-    "logo": "logos/museum-lichtspiele.png"
+    "logo": "logos/museum-lichtspiele.png",
+    "type": {
+      "de": "Programmkino",
+      "en": "Arthouse cinema"
+    },
+    "address": [
+      "Lilienstraße 2, 81669 München"
+    ],
+    "intro": {
+      "de": "Die Museum Lichtspiele nahe dem Deutschen Museum eröffneten im November 1910 als Gabriels Tonbildtheater und sind heute das älteste noch bestehende Kino der Stadt. Bekannt sind sie für Filme in Originalsprache und die „Rocky Horror Picture Show“, die hier seit Jahrzehnten läuft.",
+      "en": "The Museum Lichtspiele near the Deutsches Museum opened in November 1910 as Gabriels Tonbildtheater and are now the oldest surviving cinema in the city. They are known for original-language films and for “The Rocky Horror Picture Show”, which has been running here for decades."
+    },
+    "photo": {
+      "file": "venues/museum-lichtspiele.jpg",
+      "credit": "Burkhard Mücke",
+      "license": "CC BY-SA 4.0",
+      "source": "https://commons.wikimedia.org/wiki/File:2021_Lilienstra%C3%9Fe_2_Museumslichtspiele_6.jpg"
+    }
   },
   {
     "id": "city-kino-atelier",
@@ -131,7 +370,24 @@
     "category": "cinema",
     "color": "#2e8540",
     "home": "https://www.city-kinos.de/filme",
-    "logo": "logos/city-kino-atelier.png"
+    "logo": "logos/city-kino-atelier.png",
+    "type": {
+      "de": "Programmkino",
+      "en": "Arthouse cinema"
+    },
+    "address": [
+      "Sonnenstraße 12, 80331 München"
+    ],
+    "intro": {
+      "de": "City und Atelier liegen zusammen an der Sonnenstraße, wenige Schritte vom Stachus. Die Kinos zeigen aktuelles Arthouse-Kino und ausgewählte Filmreihen mitten in der Innenstadt.",
+      "en": "City and Atelier share a site on Sonnenstraße, a few steps from Stachus. The cinemas show current arthouse films and selected series right in the city centre."
+    },
+    "photo": {
+      "file": "venues/city-kino-atelier.jpg",
+      "credit": "herr.g",
+      "license": "CC BY-SA 2.0",
+      "source": "https://commons.wikimedia.org/wiki/File:Atelier_%26_City_Kino_M%C3%BCnchen.jpg"
+    }
   },
   {
     "id": "cinema-muenchen",
@@ -140,7 +396,18 @@
     "category": "cinema",
     "color": "#162a47",
     "home": "https://cinema-muenchen.com/de/programmuebersicht/",
-    "logo": "logos/cinema-muenchen.png"
+    "logo": "logos/cinema-muenchen.png",
+    "type": {
+      "de": "Programmkino · Originalversion",
+      "en": "Arthouse cinema · Original version"
+    },
+    "address": [
+      "Nymphenburger Straße 31, 80335 München"
+    ],
+    "intro": {
+      "de": "Das Cinema in der Maxvorstadt wurde am 23. Oktober 1954 eröffnet; das geschwungene Vordach aus dieser Zeit ist bis heute erhalten. Es hat sich auf Filme in Originalversion spezialisiert und gilt seit Jahrzehnten als Vorreiter bei der Kinotechnik.",
+      "en": "The Cinema in Maxvorstadt opened on 23 October 1954, and its curved 1950s canopy still survives. It specialises in original-version films and has been a pioneer of cinema technology for decades."
+    }
   },
   {
     "id": "tu-film",
@@ -149,6 +416,18 @@
     "category": "cinema",
     "color": "#0065bd",
     "home": "https://www.tu-film.de/",
-    "logo": "logos/tu-film.png"
+    "logo": "logos/tu-film.png",
+    "type": {
+      "de": "Studentisches Kino",
+      "en": "Student cinema"
+    },
+    "address": [
+      "Hörsaal 1200, Arcisstraße 21, 80333 München",
+      "Hörsaal MW 1801, Boltzmannstraße 15, 85748 Garching"
+    ],
+    "intro": {
+      "de": "Der tu film ist das studentische Kino an der Technischen Universität München. Im Semester laufen Filme in Hörsälen auf dem Stammgelände und in Garching, von aktuellen Titeln bis zu Klassikern wie der alljährlichen Feuerzangenbowle im Dezember. Alle sind willkommen, nicht nur Studierende.",
+      "en": "der tu film is the student cinema at the Technical University of Munich. During term it screens films in lecture halls on the main campus and in Garching, from recent releases to classics such as the annual Feuerzangenbowle in December. Everyone is welcome, not just students."
+    }
   }
 ]
