@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-11-03T14:02:05+00:00",
+ "generated_at": "2026-11-04T04:02:43+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
-   "count": 195
+   "count": 193
   },
   "kammerspiele": {
    "ok": true,
@@ -15,7 +15,7 @@
   },
   "deutsches-theater": {
    "ok": true,
-   "count": 430
+   "count": 428
   },
   "metropoltheater": {
    "ok": true,
@@ -43,7 +43,7 @@
   },
   "muffatwerk": {
    "ok": true,
-   "count": 209
+   "count": 207
   },
   "bayerische-staatsoper": {
    "ok": false,
@@ -53,25 +53,25 @@
   },
   "gaertnerplatz": {
    "ok": false,
-   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/spielplan/index.html?ajax=1&offset=0&letzterTermin=0 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x705590e874d0>, 'Connection to ",
+   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/spielplan/index.html?ajax=1&offset=0&letzterTermin=0 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x78c3840cf590>, 'Connection to ",
    "kept_previous": true,
    "count": 256
   },
   "museum-lichtspiele": {
    "ok": true,
-   "count": 178
+   "count": 162
   },
   "city-kino-atelier": {
    "ok": true,
-   "count": 192
+   "count": 176
   },
   "cinema-muenchen": {
    "ok": true,
-   "count": 53
+   "count": 67
   },
   "tu-film": {
    "ok": true,
-   "count": 23
+   "count": 22
   }
  }
 }
