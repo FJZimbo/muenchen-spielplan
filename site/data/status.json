@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-11-09T04:05:25+00:00",
+ "generated_at": "2026-11-10T04:00:46+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
-   "count": 171
+   "count": 167
   },
   "kammerspiele": {
    "ok": true,
@@ -11,7 +11,7 @@
   },
   "volkstheater": {
    "ok": true,
-   "count": 101
+   "count": 99
   },
   "deutsches-theater": {
    "ok": true,
@@ -19,7 +19,7 @@
   },
   "metropoltheater": {
    "ok": true,
-   "count": 75
+   "count": 74
   },
   "schwere-reiter": {
    "ok": true,
@@ -35,7 +35,7 @@
   },
   "muenchner-philharmoniker": {
    "ok": true,
-   "count": 94
+   "count": 91
   },
   "brso": {
    "ok": true,
@@ -43,7 +43,7 @@
   },
   "muffatwerk": {
    "ok": true,
-   "count": 206
+   "count": 207
   },
   "bayerische-staatsoper": {
    "ok": false,
@@ -53,21 +53,21 @@
   },
   "gaertnerplatz": {
    "ok": false,
-   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/spielplan/index.html?ajax=1&offset=0&letzterTermin=0 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x744c54082630>, 'Connection to ",
+   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/spielplan/index.html?ajax=1&offset=0&letzterTermin=0 (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x7928181515e0>, 'Connection to ",
    "kept_previous": true,
    "count": 250
   },
   "museum-lichtspiele": {
    "ok": true,
-   "count": 69
+   "count": 179
   },
   "city-kino-atelier": {
    "ok": true,
-   "count": 97
+   "count": 105
   },
   "cinema-muenchen": {
    "ok": true,
-   "count": 70
+   "count": 77
   },
   "tu-film": {
    "ok": true,
