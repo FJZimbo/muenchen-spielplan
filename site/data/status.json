@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-14T01:08:21+00:00",
+ "generated_at": "2026-11-14T10:17:10+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
@@ -50,10 +50,8 @@
    "count": 175
   },
   "gaertnerplatz": {
-   "ok": false,
-   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/type/u30-.html (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x799f1770c170>, 'Connection to www.gaertnerplatztheater.de timed out.",
-   "kept_previous": true,
-   "count": 247
+   "ok": true,
+   "count": 250
   },
   "museum-lichtspiele": {
    "ok": true,
