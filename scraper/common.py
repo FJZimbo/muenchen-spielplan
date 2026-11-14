@@ -94,6 +94,7 @@ def event(venue_id, title, start, **f):
         "tags": f.get("tags") or [],
         "status": f.get("status") or "unknown",
         "price": f.get("price") or None,
+        "student_price": f.get("student_price") or None,
         "duration_min": f.get("duration_min") or None,
         "image": f.get("image") or None,
         "url": f.get("url") or None,

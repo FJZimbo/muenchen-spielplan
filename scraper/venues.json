@@ -23,6 +23,19 @@
       "credit": "Burkhard Mücke",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:2019-01-26_Residenztheater_M%C3%BCnchen.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "10 €",
+        "en": "10 €"
+      },
+      "terms": {
+        "de": "Schüler, Studierende, Azubis bis 30 · Platzgruppen 4–7",
+        "en": "Pupils, students, trainees under 30 · seating groups 4–7"
+      },
+      "selected_only": false,
+      "source": "https://www.residenztheater.de/en/tickets/reductions",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -49,6 +62,19 @@
       "credit": "Christian Wolf",
       "license": "CC BY-SA 3.0 de",
       "source": "https://commons.wikimedia.org/wiki/File:M%C3%BCnchner_Kammerspiele.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "12 €",
+        "en": "12 €"
+      },
+      "terms": {
+        "de": "U30-Ticket, alle Bühnen",
+        "en": "Under-30 ticket, all stages"
+      },
+      "selected_only": false,
+      "source": "https://www.muenchner-kammerspiele.de/en/service/51992-information-about-tickets",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -75,6 +101,19 @@
       "credit": "HubertSt",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Volkstheater-Muenchen-Tumblingerstrasse-Turm-002.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "8,50 €",
+        "en": "8,50 €"
+      },
+      "terms": {
+        "de": "Schüler, Studierende, Azubis · Abendkasse 6 € · nicht bei Konzerten, Lesungen",
+        "en": "Pupils, students, trainees · €6 at the evening box office · not for concerts, readings"
+      },
+      "selected_only": false,
+      "source": "https://www.muenchner-volkstheater.de/karten/preise",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -101,6 +140,19 @@
       "credit": "Fentriss",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Mueschwanthalerstr1518062017c90_(Deutsches_Theater).jpg"
+    },
+    "student": {
+      "price": {
+        "de": "20 €",
+        "en": "20 €"
+      },
+      "terms": {
+        "de": "Schüler, Studierende, Azubis · Restkarten ab 60 Min. vor Beginn an der Kasse",
+        "en": "Pupils, students, trainees · remaining tickets at the box office from 60 min before"
+      },
+      "selected_only": false,
+      "source": "https://www.deutsches-theater.de/en/discounts/",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -127,6 +179,19 @@
       "credit": "Jakob Piloty",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Metropoltheater_Foyeranbau.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "10–15 €",
+        "en": "10–15 €"
+      },
+      "terms": {
+        "de": "In Ausbildung bis 27",
+        "en": "Pupils, students, trainees up to 27"
+      },
+      "selected_only": false,
+      "source": "https://www.metropoltheater.com/karten/kartenverkauf/",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -231,6 +296,19 @@
       "credit": "Burkhard Mücke",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:2023-03-11_Isarphilharmonie_02.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "11–14 €",
+        "en": "11–14 €"
+      },
+      "terms": {
+        "de": "Bis 29 Jahre · Abo- und Kammerkonzerte",
+        "en": "Up to 29 · subscription and chamber concerts"
+      },
+      "selected_only": false,
+      "source": "https://www.mphil.de/en/concerts-tickets/u30",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -258,6 +336,19 @@
       "credit": "ErwinMeier",
       "license": "CC BY-SA 3.0",
       "source": "https://commons.wikimedia.org/wiki/File:M%C3%BCnchen_Herkulessaal_01.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "10 €",
+        "en": "10 €"
+      },
+      "terms": {
+        "de": "Unter 30, schon im Vorverkauf · nicht bei Gastveranstaltern",
+        "en": "Under 30, also in advance · not for guest promoters"
+      },
+      "selected_only": false,
+      "source": "https://www.brso.de/service/faq/",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -309,6 +400,19 @@
       "credit": "Avda",
       "license": "CC BY-SA 3.0",
       "source": "https://commons.wikimedia.org/wiki/File:Bayerische_Staatsoper_-_M%C3%BCnchen_-_2013.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "10 €",
+        "en": "10 €"
+      },
+      "terms": {
+        "de": "Unter 30, nur ausgewählte Vorstellungen",
+        "en": "Under 30, selected performances only"
+      },
+      "selected_only": true,
+      "source": "https://www.staatsoper.de/en/discounts",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -335,6 +439,19 @@
       "credit": "Burkhard Mücke",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:Das_Staatstheater_am_G%C3%A4rtnerplatz_04.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "12 €",
+        "en": "12 €"
+      },
+      "terms": {
+        "de": "Unter 30, nur ausgewählte Vorstellungen, begrenztes Kontingent",
+        "en": "Under 30, selected performances only, limited"
+      },
+      "selected_only": true,
+      "source": "https://www.gaertnerplatztheater.de/de/seiten/ermaessigungen.html",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -361,6 +478,19 @@
       "credit": "Burkhard Mücke",
       "license": "CC BY-SA 4.0",
       "source": "https://commons.wikimedia.org/wiki/File:2021_Lilienstra%C3%9Fe_2_Museumslichtspiele_6.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "10,50 €",
+        "en": "10,50 €"
+      },
+      "terms": {
+        "de": "Schüler, Studierende · donnerstags 7,90 €",
+        "en": "Pupils, students · Thursdays €7.90"
+      },
+      "selected_only": false,
+      "source": "https://www.museum-lichtspiele.de/Eintrittspreise/unterseite_2642",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -387,6 +517,19 @@
       "credit": "herr.g",
       "license": "CC BY-SA 2.0",
       "source": "https://commons.wikimedia.org/wiki/File:Atelier_%26_City_Kino_M%C3%BCnchen.jpg"
+    },
+    "student": {
+      "price": {
+        "de": "12 €",
+        "en": "12 €"
+      },
+      "terms": {
+        "de": "Schüler, Studierende, Azubis · montags 9,50 € für alle",
+        "en": "Pupils, students, trainees · Mondays €9.50 for everyone"
+      },
+      "selected_only": false,
+      "source": "https://www.city-kinos.de/en/prices-muc",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -407,6 +550,19 @@
     "intro": {
       "de": "Das Cinema in der Maxvorstadt wurde am 23. Oktober 1954 eröffnet; das geschwungene Vordach aus dieser Zeit ist bis heute erhalten. Es hat sich auf Filme in Originalversion spezialisiert und gilt seit Jahrzehnten als Vorreiter bei der Kinotechnik.",
       "en": "The Cinema in Maxvorstadt opened on 23 October 1954, and its curved 1950s canopy still survives. It specialises in original-version films and has been a pioneer of cinema technology for decades."
+    },
+    "student": {
+      "price": {
+        "de": "bis 2 € günstiger",
+        "en": "up to €2 off"
+      },
+      "terms": {
+        "de": "Studierende bis 30 · nur Parkett",
+        "en": "Students up to 30 · stalls only"
+      },
+      "selected_only": false,
+      "source": "https://cinema-muenchen.com/de/service-2/",
+      "checked": "2026-11-13"
     }
   },
   {
@@ -428,6 +584,19 @@
     "intro": {
       "de": "Der tu film ist das studentische Kino an der Technischen Universität München. Im Semester laufen Filme in Hörsälen auf dem Stammgelände und in Garching, von aktuellen Titeln bis zu Klassikern wie der alljährlichen Feuerzangenbowle im Dezember. Alle sind willkommen, nicht nur Studierende.",
       "en": "der tu film is the student cinema at the Technical University of Munich. During term it screens films in lecture halls on the main campus and in Garching, from recent releases to classics such as the annual Feuerzangenbowle in December. Everyone is welcome, not just students."
+    },
+    "student": {
+      "price": {
+        "de": "3 €",
+        "en": "€3"
+      },
+      "terms": {
+        "de": "Studentisches Kino der TUM · meist 3 € für alle",
+        "en": "TUM student cinema · usually €3 for everyone"
+      },
+      "selected_only": false,
+      "source": "https://www.tu-film.de/",
+      "checked": "2026-11-13"
     }
   }
 ]

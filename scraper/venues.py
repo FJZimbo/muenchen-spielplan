@@ -348,30 +348,84 @@ def muenchner_philharmoniker():
 
 
 # ---------------------------------------------------------------- Bayerische Staatsoper
-def staatsoper():
-    base = "https://www.staatsoper.de/spielplan"
-    page = soup(base)
-    out = []
-    for a in page.select("a.activity-list__content"):
-        tm = a.select_one("time[datetime]")
-        if not tm:
+# staatsoper.de answers scripts with 403, so the dates come from in-muenchen.de, whose venue and
+# production pages carry schema.org Event data: one entry per performance, with end time and ticket link.
+STAATSOPER_STAGES = {"nationaltheater": "Nationaltheater", "prinzregententheater": "Prinzregententheater",
+                     "cuvillies-theater": "Cuvilliés-Theater"}
+SCHEMA_STATUS = {"SoldOut": "sold_out", "LimitedAvailability": "few"}
+SCHEMA_GENRE = {"MusicEvent": "Konzert", "ChildrensEvent": "Für Kinder", "DanceEvent": "Ballett"}
+
+
+def _ld_events(html_text):
+    """Every schema.org *Event in a page's JSON-LD blocks."""
+    found = []
+
+    def walk(x):
+        if isinstance(x, dict):
+            if str(x.get("@type", "")).endswith("Event"):
+                found.append(x)
+            for v in x.values():
+                walk(v)
+        elif isinstance(x, list):
+            for v in x:
+                walk(v)
+    for block in re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html_text, re.S):
+        try:
+            walk(json.loads(block))
+        except json.JSONDecodeError:
             continue
-        y, mo, d = map(int, tm["datetime"][:10].split("-"))
-        spans = a.select(".activity-list__text > span")
-        info = text(spans[0]) if spans else ""
-        hm = find_time(info)
-        title = a.select_one(".h3")
-        row = a.find_parent(class_=re.compile("activity-list__row")) or a.parent.parent
-        tix = row.select_one("a[href*='webshop']") if row else None
-        out.append(event(
-            "bayerische-staatsoper", text(title), local_dt(y, mo, d, *(hm or (0, 0))),
-            time_tbd=hm is None,
-            stage=info.split("|", 1)[1].split("(")[0].strip() if "|" in info else None,
-            genre=text(a.select_one(".activity-list__channel")),
-            status=_status_from_text(text(row) if row else ""),
-            url=absolute(base, a.get("href")),
-            ticket_url=tix.get("href") if tix else None,
-        ))
+    return found
+
+
+def _is_staatsoper(ev):
+    offers = ev.get("offers") or {}
+    url = (offers[0] if isinstance(offers, list) and offers else offers).get("url") or "" if offers else ""
+    return "staatsoper.de" in url or "bso.webshop" in url
+
+
+def staatsoper():
+    pages = {}   # production page -> stage
+    for slug, stage in STAATSOPER_STAGES.items():
+        listing = get(f"https://www.in-muenchen.de/locations/{slug}.html").text
+        for ev in _ld_events(listing):
+            # the Nationaltheater is the Staatsoper's own house; the other two are shared with other organisers
+            if ev.get("url") and (slug == "nationaltheater" or _is_staatsoper(ev)):
+                pages.setdefault(ev["url"], stage)
+    out, seen = [], set()
+    for page, stage in pages.items():
+        try:
+            evs = _ld_events(get(page).text)
+        except Exception as exc:  # one broken page shouldn't lose the rest
+            print(f"  staatsoper: {page}: {exc}")
+            continue
+        for ev in evs:
+            if not ev.get("startDate") or ev.get("@id") in seen:
+                continue
+            seen.add(ev.get("@id"))
+            start = parse_iso(ev["startDate"])
+            end = parse_iso(ev["endDate"]) if ev.get("endDate") else None
+            offers = ev.get("offers") or {}
+            offers = offers[0] if isinstance(offers, list) and offers else offers
+            tix = offers.get("url") or ""
+            avail = (offers.get("availability") or "").rsplit("/", 1)[-1]
+            title = html.unescape(ev.get("name") or "")
+            tags = []
+            m = re.search(r"\s+[–-]\s+(Premiere|Familienvorstellung|Wiederaufnahme)$", title)
+            if m:
+                title, tags = title[:m.start()], [m.group(1)]
+            image = ev.get("image")
+            out.append(event(
+                "bayerische-staatsoper", title, start,
+                stage=(ev.get("location") or {}).get("name") or stage,
+                genre=SCHEMA_GENRE.get(ev.get("@type")),
+                tags=tags,
+                status="cancelled" if "Cancelled" in (ev.get("eventStatus") or "") else SCHEMA_STATUS.get(avail, "unknown"),
+                duration_min=int((end - start).total_seconds() // 60) if end and end > start else None,
+                image=image[0] if isinstance(image, list) and image else image if isinstance(image, str) else None,
+                url=tix if "staatsoper.de/stuecke" in tix or "staatsoper.de/en/productions" in tix else page,
+                ticket_url=tix if "webshop" in tix or "kartenanfrage" in tix else None,
+                description=html.unescape(ev.get("description") or ""),
+            ))
     return out
 
 
@@ -496,6 +550,8 @@ GP_STATUS = {"tickets": "available", "restkarten": "few", "ausverkauft": "sold_o
 
 def gaertnerplatz():
     base = "https://www.gaertnerplatztheater.de/de/spielplan/index.html"
+    # performances with the 12 € under-30 quota are listed on their own page
+    u30 = set(re.findall(r"ID_Vorstellung=(\d+)", get("https://www.gaertnerplatztheater.de/de/type/u30-.html").text))
     out = []
     for offset in range(18):  # one page per month, as the site's own "load more" does
         page = soup(base, params={"ajax": 1, "offset": offset, "letzterTermin": 0})
@@ -527,6 +583,7 @@ def gaertnerplatz():
                 duration_min=duration_from_range(when),
                 url=absolute("https://www.gaertnerplatztheater.de/de/", href),
                 ticket_url=tix.get("href") if tix and tix.get("href", "").startswith("http") else None,
+                student_price="12 €" if re.search(r"ID_Vorstellung=(\d+)", href).group(1) in u30 else None,
             ))
     return out
 
