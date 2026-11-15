@@ -1,25 +1,25 @@
 {
- "generated_at": "2026-11-14T10:17:10+00:00",
+ "generated_at": "2026-11-15T10:51:53+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
-   "count": 153
+   "count": 147
   },
   "kammerspiele": {
    "ok": true,
-   "count": 185
+   "count": 180
   },
   "volkstheater": {
    "ok": true,
-   "count": 92
+   "count": 90
   },
   "deutsches-theater": {
    "ok": true,
-   "count": 437
+   "count": 433
   },
   "metropoltheater": {
    "ok": true,
-   "count": 70
+   "count": 69
   },
   "schwere-reiter": {
    "ok": true,
@@ -43,31 +43,33 @@
   },
   "muffatwerk": {
    "ok": true,
-   "count": 208
+   "count": 206
   },
   "bayerische-staatsoper": {
    "ok": true,
-   "count": 175
+   "count": 187
   },
   "gaertnerplatz": {
-   "ok": true,
-   "count": 250
+   "ok": false,
+   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/type/u30-.html (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x7a2c25d83260>, 'Connection to www.gaertnerplatztheater.de timed out.",
+   "kept_previous": true,
+   "count": 249
   },
   "museum-lichtspiele": {
    "ok": true,
-   "count": 114
+   "count": 90
   },
   "city-kino-atelier": {
    "ok": true,
-   "count": 143
+   "count": 121
   },
   "cinema-muenchen": {
    "ok": true,
-   "count": 67
+   "count": 62
   },
   "tu-film": {
    "ok": true,
-   "count": 17
+   "count": 16
   }
  }
 }
