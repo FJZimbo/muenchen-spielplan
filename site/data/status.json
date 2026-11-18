@@ -1,25 +1,27 @@
 {
- "generated_at": "2026-11-17T11:45:33+00:00",
+ "generated_at": "2026-11-18T11:32:32+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
-   "count": 137
+   "count": 134
   },
   "kammerspiele": {
    "ok": true,
-   "count": 177
+   "count": 176
   },
   "volkstheater": {
    "ok": true,
    "count": 87
   },
   "deutsches-theater": {
-   "ok": true,
-   "count": 431
+   "ok": false,
+   "error": "RuntimeError: no events found (page layout changed?)",
+   "kept_previous": true,
+   "count": 429
   },
   "metropoltheater": {
    "ok": true,
-   "count": 69
+   "count": 68
   },
   "schwere-reiter": {
    "ok": true,
@@ -49,7 +51,7 @@
   },
   "bayerische-staatsoper": {
    "ok": true,
-   "count": 182
+   "count": 180
   },
   "gaertnerplatz": {
    "ok": true,
@@ -57,19 +59,19 @@
   },
   "museum-lichtspiele": {
    "ok": true,
-   "count": 171
+   "count": 155
   },
   "city-kino-atelier": {
    "ok": true,
-   "count": 187
+   "count": 172
   },
   "cinema-muenchen": {
    "ok": true,
-   "count": 65
+   "count": 70
   },
   "tu-film": {
    "ok": true,
-   "count": 16
+   "count": 15
   }
  }
 }
