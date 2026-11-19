@@ -1,35 +1,33 @@
 {
- "generated_at": "2026-11-18T11:32:32+00:00",
+ "generated_at": "2026-11-19T11:35:47+00:00",
  "venues": {
   "residenztheater": {
    "ok": true,
-   "count": 134
+   "count": 194
   },
   "kammerspiele": {
    "ok": true,
-   "count": 176
+   "count": 175
   },
   "volkstheater": {
    "ok": true,
    "count": 87
   },
   "deutsches-theater": {
-   "ok": false,
-   "error": "RuntimeError: no events found (page layout changed?)",
-   "kept_previous": true,
-   "count": 429
+   "ok": true,
+   "count": 441
   },
   "metropoltheater": {
    "ok": true,
-   "count": 68
+   "count": 67
   },
   "schwere-reiter": {
    "ok": true,
-   "count": 24
+   "count": 25
   },
   "hochx": {
    "ok": true,
-   "count": 34
+   "count": 36
   },
   "isarphilharmonie": {
    "ok": true,
@@ -47,27 +45,29 @@
    "ok": false,
    "error": "RuntimeError: no events found (page layout changed?)",
    "kept_previous": true,
-   "count": 204
+   "count": 202
   },
   "bayerische-staatsoper": {
    "ok": true,
-   "count": 180
+   "count": 178
   },
   "gaertnerplatz": {
-   "ok": true,
+   "ok": false,
+   "error": "ConnectTimeout: HTTPSConnectionPool(host='www.gaertnerplatztheater.de', port=443): Max retries exceeded with url: /de/type/u30-.html (Caused by ConnectTimeoutError(<HTTPSConnection(host='www.gaertnerplatztheater.de', port=443) at 0x7aab48969f40>, 'Connection to www.gaertnerplatztheater.de timed out.",
+   "kept_previous": true,
    "count": 248
   },
   "museum-lichtspiele": {
    "ok": true,
-   "count": 155
+   "count": 140
   },
   "city-kino-atelier": {
    "ok": true,
-   "count": 172
+   "count": 155
   },
   "cinema-muenchen": {
    "ok": true,
-   "count": 70
+   "count": 67
   },
   "tu-film": {
    "ok": true,
